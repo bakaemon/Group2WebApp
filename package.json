@@ -22,6 +22,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "glob": "^7.1.7",
+    "hbs": "^4.1.2",
     "mongoose": "^5.12.11",
     "nodemon": "^2.0.7",
     "path": "^0.12.7"

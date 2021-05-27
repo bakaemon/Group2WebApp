@@ -1,8 +1,10 @@
 module.exports = {
     /**
-     * 
+     * Quicksort algorithm implementation. Faster than vanilla Array.sort built-in.
      * @param {Array} array 
-     * @returns Array
+     * ```js
+     * var sorted_array = Object.qsort(unsorted_array)
+     * ```
      */
     qsort: function quicksort(array) {
         if (array.length <= 1) {

@@ -5,5 +5,6 @@ module.exports = {
     session:require("express-session"),
     path:require("path"),
     fs: require("fs"),
+    hbs: require("hbs"),
     //upon adding new libraries, create their aliases here
 }
