@@ -1,0 +1,25 @@
+{
+  "name": "group2webapp",
+  "version": "1.0.0",
+  "description": "Group 2 Nodejs Application\r ## Members\r Tran Quang Binh<br>\r Nguyen Van Duc<br>\r Nguyen Quang Anh<br>\r Phan Bao Hoang ngu vl123<br>",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bakaemon/Group2WebApp.git"
+  },
+  "author": "Binh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bakaemon/Group2WebApp/issues"
+  },
+  "homepage": "https://github.com/bakaemon/Group2WebApp#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.12.11",
+    "path": "^0.12.7"
+  }
+}
