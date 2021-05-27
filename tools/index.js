@@ -1,3 +1,6 @@
+/**
+ * This file í to import all js file inside this folder
+ */
 let path = require("../libraries");
 let fs = require("../libraries").fs;
 let glob = require("glob");
