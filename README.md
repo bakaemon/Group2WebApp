@@ -4,4 +4,4 @@ Group 2 Nodejs Application
 Tran Quang Binh<br>
 Nguyen Van Duc<br>
 Nguyen Quang Anh<br>
-Phan Bao Hoang ngu vl123<br>
+Phan Bao Hoang<br>
