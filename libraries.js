@@ -1,6 +1,6 @@
 //export libraries when being required
 module.exports = {
-    express: require("express"), //alias of express variable at line 2
+    express: require("express"),
     bodyParser: require("body-parser"),
     session:require("express-session"),
     mongoose: require("mongoose"),

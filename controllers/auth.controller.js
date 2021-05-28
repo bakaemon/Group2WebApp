@@ -9,9 +9,6 @@ exports.signup = async (req, res) => {
     const email = req.body.email;
     const fullName = req.body.full_name;
     const password = req.body.password;
-
-    console.log(username, email, fullName, password)
-
     const role = await Role.find({name: req.body.role});
     if (!role) {
       return res.send({
@@ -19,14 +16,14 @@ exports.signup = async (req, res) => {
       });
     }
 
+    if (User.find({username: username})) return res.send({ message: "User has already existed."});
     const user = {
       username: username,
       fullName: fullName,
       email: email,
       password: password,
       role: role._id
-    }
-
+    };
     await User.create(user);
 
     res.send({
