@@ -1,4 +1,4 @@
-let {fs} = require("../libraries");
+let { fs } = require("../libraries");
 
 const files = fs.readdirSync('controllers/', { withFileTypes: true })
   .filter(item => !item.isDirectory())
@@ -7,8 +7,7 @@ for (let name_module of files) {
   var name = name_module.split(".")[0];
   if (name != "index") {
     module.exports[name] = require("./" + name_module)
-    console.log("Loaded model `" + name + "` from " + name_module);
+    console.log("Loaded controllers `" + name + "` from " + name_module);
   }
 }
-// console.log(modu
 // console.log(module.exports); //for debug, comment this when not needing it
