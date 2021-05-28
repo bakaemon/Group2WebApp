@@ -7,5 +7,6 @@ module.exports = {
     path:require("path"),
     fs: require("fs"),
     hbs: require("hbs"),
+    bcrypt: require("bcryptjs")
     //upon adding new libraries, create their aliases here
 }
