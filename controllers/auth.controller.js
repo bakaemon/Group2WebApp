@@ -16,6 +16,6 @@ async function getAllUser(req, res) {
   }
 }
 
-module.exports.auth = {
+module.exports = {
   getAllUser,
 }
