@@ -2,12 +2,11 @@
  * This file í to import all js file inside this folder
  */
 let fs = require("../libraries").fs;
-let glob = require("glob");
 
-var files = fs.readdirSync('tools/', {withFileTypes: true})
+const files = fs.readdirSync('tools/', {withFileTypes: true})
 .filter(item => !item.isDirectory())
 .map(item => item.name);
-for (var name of files) {
+for (let name of files) {
     name = name.replace(".js", "");
-    if (name != "index") module.exports[name] = require("./"+name)[name]
+    if (name !== "index") module.exports[name] = require("./"+name)[name]
 }
