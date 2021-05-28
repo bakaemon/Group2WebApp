@@ -9,12 +9,12 @@ const controller = require("./controllers")
 app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
-var uri = ""; //URI connected to database
+var uri = "mongodb+srv://admin2009:binhminh2001@cluster0.zb7re.mongodb.net/"; //URI connected to database
 mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => { //execute on success
-    console.log("Connected to db successfully.");
+    console.log("Connected to database successfully.");
 }).catch((e) => { //execute on error, print error on console and exit
     console.log(e);
     process.exit();
@@ -23,3 +23,10 @@ mongoose.connect(uri, {
 /* Access */
 app.get("/user/all")
 app.post("user/all")
+app.get("/", (req, res) => { res.write("Hello, world!"); res.end()})
+
+/* 404 handling */
+app.use((req, res, next) => {
+    res.status(404).redirect("/404");
+})
+app.listen(3000);
