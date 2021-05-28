@@ -8,9 +8,9 @@ for (let name_module of files) {
   if (name != "index" && name_module.split(".")[2] == "js") {
     try {
       module.exports[name] = require("./" + name_module);
-      console.log("Loaded model `" + name + "` from " + name_module);
+      console.log("Loaded controller `" + name + "` from " + name_module);
     } catch (e) {
-      console.log("Failed to load model `" + name + "` from " + name_module);
+      console.log("Failed to load controller `" + name + "` from " + name_module);
     }
   }
 }
