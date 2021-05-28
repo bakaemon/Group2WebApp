@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({ //?
   // reference to Role collection
   roles: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Role"
+    ref: "Role" //need further study
   }
 });
 

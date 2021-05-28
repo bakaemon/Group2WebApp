@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 var uri = "mongodb+srv://admin2009:binhminh2001@cluster0.zb7re.mongodb.net/"; //URI connected to database
-mongoose.connect(uri, {
+mongoose.connect(uri, { 
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => { //execute on success
@@ -23,7 +23,7 @@ mongoose.connect(uri, {
 /* Access */
 app.get("/user/all")
 app.post("user/all")
-app.get("/", (req, res) => { res.write("Hello, world!"); res.end()})
+app.get("/", (req, res) => { res.write("Hello, world!"); res.end()});
 
 /* 404 handling */
 app.use((req, res, next) => {

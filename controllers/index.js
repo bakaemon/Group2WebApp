@@ -1,3 +1,4 @@
+//same code like model one
 let { fs } = require("../libraries");
 
 const files = fs.readdirSync('controllers/', { withFileTypes: true })
