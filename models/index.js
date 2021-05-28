@@ -12,11 +12,11 @@ let fs = require("../libraries").fs;
 const files = fs.readdirSync('models/', { withFileTypes: true })
   .filter(item => !item.isDirectory())
   .map(item => item.name);
-for (let name of files) {
-  name = name.replace(".model.js", "");
-  if (name != "index.js") {
-    module.exports[name] = require("./" + name + ".model.js")
-    console.log("Loaded model `" + name + "` from " + name + ".model.js");
+for (let name_module of files) {
+  var name = name_module.split(".")[0];
+  if (name != "index") {
+    module.exports[name] = require("./" + name_module)
+    console.log("Loaded model `" + name + "` from " + name_module);
   }
 }
 // console.log(module.exports); //for debug, comment this when not needing it
