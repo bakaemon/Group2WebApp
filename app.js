@@ -1,4 +1,5 @@
 const lib = require("./libraries"); //get exported variables from this module
+const util = require("./tools")
 const app = lib.express();
 const mongoose = lib.mongoose;
 const bodyParser = lib.bodyParser;
@@ -21,9 +22,9 @@ mongoose.connect(uri, {
 })
 
 /* Access */
-app.get("/user/all")
-app.post("user/all")
-app.get("/", (req, res) => { res.write("Hello, world!"); res.end()});
+app.get("/user/all");
+app.post("user/all");
+app.get("/", (req, res) => { res.write(`${Date()}`); res.end()});
 
 /* 404 handling */
 app.use((req, res, next) => {
