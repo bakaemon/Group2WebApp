@@ -1,13 +1,12 @@
 const db = require("../models")
-const User = db.user
+const User = db.User
 
-getAllUser = async (req, res) => {
+async function getAllUser(req, res) {
   try {
     const users = await User.find({});
-
     res.send({
       data: users
-    })
+    });
 
   } catch(e) {
     console.log(e);
@@ -17,6 +16,6 @@ getAllUser = async (req, res) => {
   }
 }
 
-module.exports = userController = {
-  getAllUser
+module.exports.auth = {
+  getAllUser,
 }
