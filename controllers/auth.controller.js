@@ -1,6 +1,6 @@
-const db = require("../models"); // get template model for data handling from database, need further study
-const User = db.user;
-const Role = db.role;
+const models = require("../models"); // get template model for data handling from database, need further study
+const User = models.user;
+const Role = models.role;
 const {bcrypt} = require("../libraries")
 
 exports.signup = async (req, res) => {
