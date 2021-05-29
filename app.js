@@ -4,6 +4,7 @@ const app = lib.express();
 const mongoose = lib.mongoose;
 const bodyParser = lib.bodyParser;
 const Role = require("./models/role.model");
+const routes = require("./routes/");
 
 
 /* Middlewares */
@@ -33,12 +34,8 @@ mongoose.connect(uri, {
 })
 
 // Routes
-require("./routes/auth.route")(app)
-
-/* Access */
-app.get("/user/all");
-app.post("user/all");
-app.get("/", (req, res) => { res.write(`${Date()}`); res.end()});
+routes.auth(app);
+routes.home(app);
 
 /* 404 handling */
 app.use((req, res, next) => {
@@ -48,13 +45,13 @@ app.use((req, res, next) => {
 app.listen(3000);
 
 /**
- * Auto-generate role after successfully connected to db
+ * Auto-generate roles after successfully connected to db
  */
 const roleInitialize = async () => {
     try {
         const count = await Role.estimatedDocumentCount();
         if (count === 0) {
-            await Role.create({name: "admin"});
+            await Role.create({name: "admin"}); //create role
             console.log("Roles admin is added.")
 
             await Role.create({name: "staff"});

@@ -68,7 +68,7 @@ exports.login = async (req, res) => {
 }
 
 exports.getSignup = (req, res) => {
-  res.render("auth/signup")
+  res.render("auth/signup");
 }
 
 exports.getLogin = (req, res) => {
