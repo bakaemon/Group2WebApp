@@ -5,6 +5,7 @@ const UserSchema = new mongoose.Schema({ //?
   fullName: String,
   email: String,
   password: String,
+  bio: String,
   // reference to Role collection
   role: {
     type: mongoose.Schema.Types.ObjectId,
