@@ -8,6 +8,20 @@ const routes = require("./routes/");
 
 
 /* Middlewares */
+// express session initialization
+app.use(lib.session({
+    resave: true, 
+    saveUninitialized: true, 
+    secret: 'extremelysecret', 
+    cookie: { maxAge: 3600000 }
+}));
+// hbs helper logic operation
+lib.hbs.registerHelper('ifequal', function(v1, v2, options) {
+    if(v1 === v2) {
+      return options.fn(this);
+    }
+    return options.inverse(this);
+  });
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
@@ -36,6 +50,7 @@ mongoose.connect(uri, {
 // Routes
 routes.auth(app);
 routes.home(app);
+routes.test(app);
 
 /* 404 handling */
 app.use((req, res, next) => {

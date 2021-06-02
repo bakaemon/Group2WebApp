@@ -7,4 +7,5 @@ module.exports = (app) => {
   //GET event handlers
   app.get("/auth/signup", authController.getSignup);
   app.get("/auth/login", authController.getLogin)
+  app.get("/auth/logout", authController.logout)
 }

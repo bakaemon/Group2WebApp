@@ -1,7 +1,7 @@
 const models = require("../models"); // get template model for data handling from database, need further study
 const User = models.user;
 const Role = models.role;
-const {bcrypt} = require("../libraries")
+const { bcrypt } = require("../libraries")
 
 exports.signup = async (req, res) => {
   try {
@@ -9,14 +9,14 @@ exports.signup = async (req, res) => {
     const email = req.body.email;
     const fullName = req.body.full_name;
     const password = req.body.password;
-    const role = await Role.find({name: req.body.role});
+    const role = await Role.find({ name: req.body.role });
     if (!role) {
       return res.send({
         message: `Role ${req.body.role} does not existed.`
       });
     }
 
-    if (User.find({username: username})) return res.send({ message: "User has already existed."});
+    if (await User.findOne({ username: username })) return res.send({ message: "User has already existed." });
     const user = {
       username: username,
       fullName: fullName,
@@ -43,9 +43,9 @@ exports.login = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    const user = await User.findOne({$or: [{username: username}, {email: email}]});
+    const user = await User.findOne({ $or: [{ username: username }, { email: email }] });
 
-    if(!user) {
+    if (!user) {
       return res.send({
         message: "User not found."
       });
@@ -58,15 +58,18 @@ exports.login = async (req, res) => {
     }
 
     // Store session first be for redirect.
-    res.redirect("/");
+    req.session.User = username;
+    res.redirect("/?success=true");
   } catch (e) {
     console.log(e);
     res.send({
-      message: "An error occurred while signing up."
+      message: "An error occurred while login."
     })
   }
 }
-
+exports.logout = (req, res) => {
+  res.session["User"].destroy(() => { res.redirect("/auth/login"); }); //logout and go back to login page
+}
 exports.getSignup = (req, res) => {
   res.render("auth/signup");
 }
