@@ -81,8 +81,7 @@ exports.login = async (req, res) => {
 exports.logout = (req, res) => {
   const userSession = req.session.User
   if (userSession) {
-    userSession.destroy(() => {
-    }); //logout and go back to login page
+    req.session.destroy(); //logout and go back to login page
   }
   res.redirect("/auth/login");
 }

@@ -8,12 +8,14 @@
         <div class="navbar-nav">
             <a href="/" class="nav-item nav-link active">Home</a>
             <a href="#" class="nav-item nav-link">About</a>
+            {{#ifCond user.role "==" "admin"}}
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Services</a>
                 <div class="dropdown-menu">
                     <a href="admin/users" class="dropdown-item">User Management</a>
                 </div>
             </div>
+            {{/ifCond}}
         </div>
         <form class="navbar-form form-inline">
             <div class="input-group search-box">
