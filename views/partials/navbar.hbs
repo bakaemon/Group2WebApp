@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-xl navbar-light bg-light">
-    <a href="#" class="navbar-brand"><i class="fa fa-cube"></i>FPT<b> CMS</b></a>
+    <a href="/" class="navbar-brand"><i class="fa fa-cube"></i><b style="color: coral;">FPT</b> <b>CMS</b></a>
     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -24,8 +24,8 @@
             </div>
         </form>
         <div class="navbar-nav ml-auto">
-            <a href="#" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">1</span></a>
-            <a href="#" class="nav-item nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge">10</span></a></a>
+            {{!-- <a href="#" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">1</span></a>
+            <a href="#" class="nav-item nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge">10</span></a></a> --}}
             {{#if (isdefined user)}}
             <div class="nav-item dropdown">
                 <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action">{{user.username}}<b
