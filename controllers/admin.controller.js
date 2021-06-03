@@ -5,7 +5,6 @@ const {ObjectId} = require("../libraries").mongoose.Types;
 exports.addUser = async (req, res) => {
 
 }
-
 exports.getUsers = async (req, res) => {
   const page = req.params.page || 1; // Page 
   try {
