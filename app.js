@@ -6,15 +6,9 @@ const bodyParser = lib.bodyParser;
 const Role = require("./models/role.model");
 const routes = require("./routes/");
 
-const hbs = lib.hbs
+const hbs = lib.hbs;
 
-
-hbs.registerHelper('ifequal', function(v1, v2, options) {
-  if(v1 === v2) {
-    return options.fn(this);
-  }
-  return options.inverse(this);
-});
+require('./helpers')(hbs);
 
 /* Middlewares */
 // express session initialization
@@ -29,27 +23,6 @@ app.use(lib.session({
 app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: true}));
-
-// hbs helper logic operation
-// const hbs = handlebars.create({
-//   // Specify helpers which are only registered on this instance.
-//   helpers: {
-//     if_equal: function(a, b, opts) {
-//       if (a === b) {
-//         return opts.fn(this)
-//       } else {
-//         return opts.inverse(this)
-//       }
-//     }
-//   }
-// });
-
-// set view engine for view
-// app.engine('hbs', handlebars({
-//   extname: '.hbs',
-//   // defaultLayout: 'main',
-//   partialsDir: __dirname + '/views/partials/'
-// }));
 hbs.registerPartials('views/partials');
 app.set('view options', { layout: '/layouts/main' });
 app.set("view engine", ".hbs");

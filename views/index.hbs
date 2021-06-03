@@ -1,5 +1,5 @@
-{{#ifequal user "admin"}}
+{{#ifCond user "==" "admin"}}
 Hello my admin "{{user.username}}""
 {{else}}
 Hello {{user.username}}
-{{/ifequal}}
+{{/ifCond}}

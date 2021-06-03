@@ -6,19 +6,14 @@
     <!-- Collection of nav links, forms, and other content for toggling -->
     <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
         <div class="navbar-nav">
-            <a href="#" class="nav-item nav-link active">Home</a>
+            <a href="/" class="nav-item nav-link active">Home</a>
             <a href="#" class="nav-item nav-link">About</a>
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Services</a>
                 <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Web Design</a>
-                    <a href="#" class="dropdown-item">Web Development</a>
-                    <a href="#" class="dropdown-item">Graphic Design</a>
-                    <a href="#" class="dropdown-item">Digital Marketing</a>
+                    <a href="admin/users" class="dropdown-item">User Management</a>
                 </div>
             </div>
-            <a href="#" class="nav-item nav-link">Blog</a>
-            <a href="#" class="nav-item nav-link">Contact</a>
         </div>
         <form class="navbar-form form-inline">
             <div class="input-group search-box">
@@ -29,9 +24,9 @@
         <div class="navbar-nav ml-auto">
             <a href="#" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">1</span></a>
             <a href="#" class="nav-item nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge">10</span></a></a>
+            {{#if (isdefined user)}}
             <div class="nav-item dropdown">
-                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img
-                        src="/examples/images/avatar/2.jpg" class="avatar" alt="Avatar"> Paula Wilson <b
+                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action">{{user.username}}<b
                         class="caret"></b></a>
                 <div class="dropdown-menu">
                     <a href="#" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a></a>
@@ -41,6 +36,9 @@
                     <a href="#" class="dropdown-item"><i class="material-icons">&#xE8AC;</i> Logout</a></a>
                 </div>
             </div>
+            {{else}}
+            <a href="/auth/login" class="nav-item nav-link">Login</a>
+            {{/if}}
         </div>
     </div>
 </nav>

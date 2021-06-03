@@ -7,7 +7,7 @@ module.exports = {
     path:require("path"),
     fs: require("fs"),
     hbs: require("hbs"),
-    handlebars: require("express-handlebars"),
+    // handlebars: require("express-handlebars"),
     bcrypt: require("bcryptjs")
     //upon adding new libraries, create their aliases here
 }

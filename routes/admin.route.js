@@ -13,6 +13,6 @@ module.exports = (app) => {
   app.get("/admin/addUser", (req, res) => {
     res.render("admin/addUser");
   });
-
-  app.get("/admin/getUsers", adminController.getUsers);
+  app.get("/admin/users", adminController.getUsers);
+  app.get("/admin/delete", adminController.deleteUser)
 }
