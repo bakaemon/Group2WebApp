@@ -1,14 +1,69 @@
 const model = require("../models");
 const User = model.user;
-const {ObjectId} = require("../libraries").mongoose.Types;
-
+const Role = model.role;
+const { ObjectId } = require("../libraries").mongoose.Types;
+/* POST methods*/
 exports.addUser = async (req, res) => {
+  try {
+    const username = req.body.username;
+    const email = req.body.email;
+    const fullName = req.body.fullname;
+    const password = req.body.password;
+    let role = req.body.role;
+    let roles = await Role.find({});
+    if (roles.length == 0) res.send("Can't not retrieve roles from database.");
+    const check = await Role.findOne({ name: role });
+    if (!check) {
+      return res.render("admin/addUser", {
+        message: `Role ${req.body.role} does not existed.`
+      });
+    }
 
+    if (await User.findOne({ username: username })) return res.render("admin/addUser", { message: "User has already existed." });
+    const user = {
+      username: username,
+      fullName: fullName,
+      email: email,
+      password: password,
+      role: check._id
+    };
+    await User.create(user);
+
+    res.render("admin/addUser", {
+      message: "User added successfully."
+    });
+  } catch (e) {
+    console.log(e);
+    res.render("admin/addUser", {
+      message: "An error occurred while signing up"
+    })
+  }
 }
+exports.editUser = async (req, res) => {
+  var user_id = req.query.id;
+  var newValues = {
+    $set: {
+      username: req.body.username,
+      fullName: req.body.fullname,
+      email: req.body.email,
+      password: req.body.password
+    }
+  }
+  await User.updateOne({ _id: ObjectId(user_id) }, newValues, async (err, result) => {
+    var message, roles = await Role.find({});
+    if (err) message = err;
+    else message = `${result.nModified} user edited.`;
+    var user = await User.findOne({ _id: ObjectId(user_id) });
+    res.render("admin/editUser", { message: message, user: user, role: roles });
+  })
+}
+
+/* GET methods */
 exports.getUsers = async (req, res) => {
   const page = req.params.page || 1; // Page 
   try {
     const searchQuery = req.query.search_query;
+    var regexQuery = { "$regex": searchQuery, "$options": "i" }
     const resPerPage = 5; // results per page
     let users, numOfUsers = 0, pages = [];
     if (!searchQuery) {
@@ -18,7 +73,7 @@ exports.getUsers = async (req, res) => {
         .limit(resPerPage);
       numOfUsers = users.length;
     } else {
-      const query = { $or: [{ email: searchQuery }, { fullName: searchQuery }, { username: searchQuery }] }
+      const query = { $or: [{ email: regexQuery }, { fullName: regexQuery }, { username: regexQuery }] }
       users = await User.find(query)
         .populate({ path: "role", model: "Role", select: "__v" })
         .skip((resPerPage * page) - resPerPage)
@@ -43,11 +98,10 @@ exports.getUsers = async (req, res) => {
     })
   }
 }
-
 exports.deleteUser = async (req, res) => {
   var user_id = req.query.id;
   try {
-    await User.deleteOne({_id: ObjectId(user_id)}, (err)=> {
+    await User.deleteOne({ _id: ObjectId(user_id) }, (err) => {
       if (err) {
         res.write("<script>alert('Can not delete user " + user_id + ".'); </script>");
         res.end();
@@ -57,3 +111,19 @@ exports.deleteUser = async (req, res) => {
   }
   catch (e) { console.log(e); }
 }
+exports.getAddUser = async (req, res) => {
+  let roles = await Role.find({});
+  if (roles.length == 0) res.send("Can't not retrieve roles from database.");
+  res.render("admin/addUser", {role: roles})
+}
+exports.getEditUser = async (req, res) => {
+  var user_id = req.query.id;
+  try {
+    var user = await User.findOne({ _id: ObjectId(user_id) }).populate({ path: "role", model: "Role" });
+    var role = await Role.find({});
+    if (!user) res.redirect("back");
+    res.render("admin/editUser", { user: user, role: role, currentrole: user.role.name });
+  }
+  catch (e) { res.send(e) }
+}
+

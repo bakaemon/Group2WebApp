@@ -1,1 +1,30 @@
-<h1>Heloo</h1>
+<div class="login-form">
+    <form action="" method="post" >
+        <h2>Create User</h2>
+        <hr>
+        <div class="form-group">{{message}}</div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="fullname" placeholder="Fullname" required>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="username" placeholder="Username" required>
+        </div>
+        <div class="form-group">
+            <input type="email" class="form-control" name="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="password" placeholder="Password" required>
+        </div>
+        <div class="form-group">
+            <select name="role" class="form-control">
+                {{#each role}}
+                <option value="{{name}}">{{name}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-lg">Add</button>
+        </div>
+    </form>
+    <div class="hint-text">Go back to <a href="/admin/users">user control panel</a></div>
+</div>

@@ -48,9 +48,9 @@ routes.test(app);
 routes.admin(app);
 
 /* 404 handling */
-app.use((req, res, next) => {
-  res.status(404).redirect("/404");
-})
+// app.use((req, res, next) => {
+//   res.status(404).redirect("/404");
+// })
 
 app.listen(3000);
 

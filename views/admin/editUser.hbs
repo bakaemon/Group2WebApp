@@ -1,0 +1,40 @@
+<div class="login-form">
+    <form action="" method="post">
+        <h2>User Management</h2>
+        <hr>
+        <div class="form-group">{{message}}</div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="fullname" value="{{user.fullName}}" required>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="username" placeholder="Username " value="{{user.username}}"
+                required>
+        </div>
+        <div class="form-group">
+            <input type="email" class="form-control" name="email" placeholder="Email" value="{{user.email}}" required>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" name="password" placeholder="Password" value="{{user.password}}"
+                required>
+        </div>
+        <div class="form-group">
+            <p> Current role: {{user.role.name}}</p>
+        </div>
+        <div class="form-group">
+
+            <select name="role" class="form-control">
+                {{#each role}}
+                {{#ifCond this.name "===" currentrole}}
+                <option value="{{_id}}" selected>{{name}}</option>
+                {{else}}
+                <option value="{{_id}}">{{name}}</option>
+                {{/ifCond}}
+                {{/each}}
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-lg">Edit</button>
+        </div>
+    </form>
+    <div class="hint-text">Go back to <a href="/admin/users">user control panel</a></div>
+</div>

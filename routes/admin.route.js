@@ -9,10 +9,11 @@ module.exports = (app) => {
     next();
   });
 
-  app.post("/admin/addUser", adminController.addUser);
-  app.get("/admin/addUser", (req, res) => {
-    res.render("admin/addUser");
-  });
+  app.post("/admin/add", adminController.addUser);
+  app.get("/admin/add", adminController.getAddUser);
+app.post("/admin/edit", adminController.editUser)
+
   app.get("/admin/users", adminController.getUsers);
-  app.get("/admin/delete", adminController.deleteUser)
+  app.get("/admin/edit", adminController.getEditUser);
+  app.get("/admin/delete", adminController.deleteUser);
 }
