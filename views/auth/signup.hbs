@@ -3,11 +3,15 @@
         <h2>Sign Up</h2>
         <p>Please fill in this form to create an account!</p>
         <hr>
-         <div class="form-group">{{message}}</div>
+        <div class="form-group">
+            <p><small style="color: red;">{{message}}</small></p>
+        </div>
         <div class="form-group">
             <div class="row">
-                <div class="col"><input type="text" class="form-control" name="first_name" placeholder="First Name" required="required"></div>
-                <div class="col"><input type="text" class="form-control" name="last_name" placeholder="Last Name" required="required"></div>
+                <div class="col"><input type="text" class="form-control" name="first_name" placeholder="First Name"
+                        required="required"></div>
+                <div class="col"><input type="text" class="form-control" name="last_name" placeholder="Last Name"
+                        required="required"></div>
             </div>
         </div>
         <div class="form-group">
@@ -20,11 +24,12 @@
             <input type="password" class="form-control" name="password" placeholder="Password" required="required">
         </div>
         <div class="form-group">
-            <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required="required">
+            <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password"
+                required="required">
         </div>
-<!--        <div class="form-group">-->
-<!--            <input type="hidden" class="form-control" name="role" value="traine">-->
-<!--        </div>-->
+        <!--        <div class="form-group">-->
+        <!--            <input type="hidden" class="form-control" name="role" value="traine">-->
+        <!--        </div>-->
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-lg">Sign Up</button>
         </div>

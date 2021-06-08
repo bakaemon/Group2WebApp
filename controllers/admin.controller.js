@@ -30,11 +30,13 @@ exports.addUser = async (req, res) => {
     await User.create(user);
 
     res.render("admin/addUser", {
+      title: "Add user",
       message: "User added successfully."
     });
   } catch (e) {
     console.log(e);
     res.render("admin/addUser", {
+      title: "Add user",
       message: "An error occurred while signing up"
     })
   }
@@ -54,7 +56,7 @@ exports.editUser = async (req, res) => {
     if (err) message = err;
     else message = `${result.nModified} user edited.`;
     var user = await User.findOne({ _id: ObjectId(user_id) });
-    res.render("admin/editUser", { message: message, user: user, role: roles });
+    res.render("admin/editUser", { title: "Edit user", message: message, user: user, role: roles });
   })
 }
 
@@ -84,6 +86,7 @@ exports.getUsers = async (req, res) => {
     for (var i = 1; i <= Math.ceil(numOfUsers / resPerPage); i++) pages.push(i);
 
     res.render("admin/getUsers", {
+      title: "User control panel",
       user: req.session.User,
       users_data: users,
       page: page,
@@ -114,7 +117,7 @@ exports.deleteUser = async (req, res) => {
 exports.getAddUser = async (req, res) => {
   let roles = await Role.find({});
   if (roles.length == 0) res.send("Can't not retrieve roles from database.");
-  res.render("admin/addUser", {role: roles})
+  res.render("admin/addUser", {title: "Add user", role: roles})
 }
 exports.getEditUser = async (req, res) => {
   var user_id = req.query.id;
@@ -122,7 +125,7 @@ exports.getEditUser = async (req, res) => {
     var user = await User.findOne({ _id: ObjectId(user_id) }).populate({ path: "role", model: "Role" });
     var role = await Role.find({});
     if (!user) res.redirect("back");
-    res.render("admin/editUser", { user: user, role: role, currentrole: user.role.name });
+    res.render("admin/editUser", { title: "Edit user", user: user, role: role, currentrole: user.role.name });
   }
   catch (e) { res.send(e) }
 }

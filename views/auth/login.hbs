@@ -1,19 +1,21 @@
 <div class="login-form">
     <form action="/auth/login" method="post">
         <h2 class="text-center">Log in</h2>
-        <div class="form-group">{{message}}</div>
+       <div class="form-group">
+            <p><small style="color: red;">{{message}}</small></p>
+        </div>
         <div class="form-group">
             <input type="text" class="form-control" placeholder="Username or email" required="required" name="login_value">
         </div>
         <div class="form-group">
             <input type="password" class="form-control" placeholder="Password" required="required" name="password">
         </div>
+        <div class="clearfix">
+            <label class="float-left form-check-label"><input type="checkbox" name="remember"> Remember me</label>
+            {{!-- <a href="#" class="float-right">Forgot Password?</a> --}}
+        </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-block">Log in</button>
-        </div>
-        <div class="clearfix">
-            <label class="float-left form-check-label"><input type="checkbox"> Remember me</label>
-            <a href="#" class="float-right">Forgot Password?</a>
         </div>
     </form>
     <p class="text-center"><a href="/auth/signup">Create an Account</a></p>

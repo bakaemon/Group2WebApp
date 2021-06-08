@@ -55,27 +55,30 @@ exports.login = async (req, res) => {
 
     if (!user) {
       return res.render("auth/login", {
-        message: "User not found."
+        message: "Username or email doesn't exist."
       });
     }
 
     if (user.password !== password) {
-      return res.send({
-        message: "Password is incorrect."
+      return res.render("auth/login", {
+        message: "Incorrect password."
       });
     }
 
     // Store session first be for redirect.
     req.session.User = {
       username: user.username,
+      fullname: user.fullName,
       role: user.role.name
     };
+    if (req.body.remember) req.session.cookie.maxAge = 365 * 24 * 60 * 60 * 1000; //expires after a year
+    else req.session.cookie.expires = false; //expire after closing browser
     res.redirect("/?success=true");
   } catch (e) {
     console.log(e);
     res.render("auth/login", {
       message: "An error occurred while login."
-    })
+    });
   }
 }
 exports.logout = (req, res) => {
@@ -86,9 +89,9 @@ exports.logout = (req, res) => {
   res.redirect("/auth/login");
 }
 exports.getSignup = (req, res) => {
-  res.render("auth/signup");
+  res.render("auth/signup", {title: "Sign up"});
 }
 
 exports.getLogin = (req, res) => {
-  res.render("auth/login");
+  res.render("auth/login", {title: "Login"});
 }

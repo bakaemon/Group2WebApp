@@ -16,7 +16,7 @@ app.use(lib.session({
   resave: true,
   saveUninitialized: true,
   secret: 'extremelysecret',
-  cookie: {maxAge: 3600000}
+  cookie: {maxAge: 600000}
 }));
 
 // parse requests of content-type - application/json
@@ -49,7 +49,7 @@ routes.admin(app);
 
 /* 404 handling */
 app.use((req, res, next) => {
-  res.status(404).redirect("/404");
+  res.render("404", {title: "Not found!"});
 })
 
 app.listen(3000);
