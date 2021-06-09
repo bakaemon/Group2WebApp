@@ -1,14 +1,10 @@
 const lib = require("./libraries"); //get exported variables from this module
-const util = require("./tools")
 const app = lib.express();
 const mongoose = lib.mongoose;
 const bodyParser = lib.bodyParser;
 const Role = require("./models/role.model");
 const routes = require("./routes/");
-
 const hbs = lib.hbs;
-
-require('./helpers')(hbs);
 
 /* Middlewares */
 // express session initialization
@@ -18,17 +14,17 @@ app.use(lib.session({
   secret: 'extremelysecret',
   cookie: {maxAge: 600000}
 }));
-
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: true}));
-hbs.registerPartials('views/partials');
 app.set('view options', { layout: '/layouts/main' });
 app.set("view engine", ".hbs");
-
 app.use(lib.express.static(lib.path.join(__dirname, '/public')));
+//register hbs functionalities
+require('./handlebars')(hbs);
 
+//connect to MongoDB
 const uri = "mongodb+srv://admin2009:binhminh2001@cluster0.zb7re.mongodb.net/cms"; //URI connected to database
 mongoose.connect(uri, {
   useNewUrlParser: true,
@@ -47,12 +43,9 @@ routes.home(app);
 routes.test(app);
 routes.admin(app);
 
-/* 404 handling */
-app.use((req, res, next) => {
-  res.render("404", {title: "Not found!"});
-})
 
-app.listen(3000);
+var port = process.env.PORT || 3000; //use port 3000 unless there are preconfigured ports
+app.listen(port);
 
 /**
  * Auto-generate roles after successfully connected to db
