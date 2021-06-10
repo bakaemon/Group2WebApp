@@ -13,9 +13,7 @@
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Services</a>
                 <div class="dropdown-menu">
                     <a href="/admin/users" class="dropdown-item">User Management</a>
-                </div>
-            <div class="dropdown-menu">
-                    <a href="/course/control" class="dropdown-item">Course Management</a>
+                    <a href="/admin/course/" class="dropdown-item">Course Management</a>
                 </div>
             </div>
             {{/ifCond}}
@@ -27,8 +25,10 @@
             </div>
         </form>
         <div class="navbar-nav ml-auto">
-            {{!-- <a href="#" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">1</span></a>
-            <a href="#" class="nav-item nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge">10</span></a></a> --}}
+            {{!-- <a href="#" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span
+                    class="badge">1</span></a>
+            <a href="#" class="nav-item nav-link messages"><i class="fa fa-envelope-o"></i><span
+                    class="badge">10</span></a></a> --}}
             {{#if (isdefined user)}}
             <div class="nav-item dropdown">
                 <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action">{{user.fullname}}<b
