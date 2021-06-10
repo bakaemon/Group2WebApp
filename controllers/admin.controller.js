@@ -48,14 +48,15 @@ exports.editUser = async (req, res) => {
       username: req.body.username,
       fullName: req.body.fullname,
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      role: ObjectId(req.body.role)
     }
   }
   await User.updateOne({ _id: ObjectId(user_id) }, newValues, async (err, result) => {
     var message, roles = await Role.find({});
     if (err) message = err;
     else message = `${result.nModified} user edited.`;
-    var user = await User.findOne({ _id: ObjectId(user_id) });
+    var user = await User.findOne({ _id: ObjectId(user_id) }).populate({ path: "role", model: "Role" });
     res.render("admin/editUser", { title: "Edit user", message: message, user: user, role: roles });
   })
 }
@@ -123,9 +124,9 @@ exports.getEditUser = async (req, res) => {
   var user_id = req.query.id;
   try {
     var user = await User.findOne({ _id: ObjectId(user_id) }).populate({ path: "role", model: "Role" });
-    var role = await Role.find({});
+    var roles = await Role.find({});
     if (!user) res.redirect("back");
-    res.render("admin/editUser", { title: "Edit user", user: user, role: role, currentrole: user.role.name });
+    res.render("admin/editUser", { title: "Edit user", user: user, role: roles });
   }
   catch (e) { res.send(e) }
 }
