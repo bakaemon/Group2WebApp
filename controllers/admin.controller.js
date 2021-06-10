@@ -9,6 +9,10 @@ exports.addUser = async (req, res) => {
     const email = req.body.email;
     const fullName = req.body.fullname;
     const password = req.body.password;
+    const dob = req.body.dob;
+    const education = req.body.education;
+    const lang = req.body.lang;
+    const score = req.body.score;
     let role = req.body.role;
     let roles = await Role.find({});
     if (roles.length == 0) res.send("Can't not retrieve roles from database.");
@@ -19,13 +23,20 @@ exports.addUser = async (req, res) => {
       });
     }
 
-    if (await User.findOne({ username: username })) return res.render("admin/addUser", { message: "User has already existed." });
+    if (await User.findOne({ $or: [{username: username}, {email: email}] })) return res.render("admin/addUser", { message: "User has already existed." });
     const user = {
       username: username,
       fullName: fullName,
       email: email,
       password: password,
-      role: check._id
+      bio: {
+        DoB: dob,
+        Education: education,
+        Lang: lang,
+        Score: score
+      },
+      role: check._id,
+      
     };
     await User.create(user);
 

@@ -42,6 +42,7 @@ routes.auth(app);
 routes.home(app);
 routes.test(app);
 routes.admin(app);
+routes.coursecontrol(app);
 
 /* 404 handling */
 app.use((req, res, next) => {

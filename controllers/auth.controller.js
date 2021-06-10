@@ -1,24 +1,31 @@
 const models = require("../models"); // get template model for data handling from database, need further study
 const User = models.user;
 const Role = models.role;
+const Course = models.course;
 const { bcrypt } = require("../libraries")
 
 exports.signup = async (req, res) => {
+  const courses = await Course.find({});
   try {
     const username = req.body.username;
     const email = req.body.email;
     const fullName = `${req.body.first_name} ${req.body.last_name}`;
     const password = req.body.password;
-    let role = "trainee";
-    const check = await Role.findOne({ name: "trainee" });
-    if (!check) {
+    const dob = req.body.dob;
+    const education = req.body.education;
+    const lang = req.body.lang;
+    const score = req.body.score;
+    const role = await Role.findOne({ name: "trainee" });
+    if (!role) {
       return res.render('./', {
+        course: courses,
         message: `Role ${req.body.role} does not existed.`
       });
     }
 
     if (password !== req.body.confirm_password) {
       return res.render("auth/signup", {
+        course: courses,
         message: "Password and confirm password are not matched."
       })
     }
@@ -29,17 +36,25 @@ exports.signup = async (req, res) => {
       fullName: fullName,
       email: email,
       password: password,
-      role: check._id
+      bio: {
+        DoB: dob,
+        Education: education,
+        Lang: lang,
+        Score: score
+      },
+      role: role._id,
+      
     };
-    console.log(user);
     await User.create(user);
 
     res.render("auth/signup", {
+      course: courses,
       message: "Sign up successfully."
     });
   } catch (e) {
     console.log(e);
     res.render("auth/signup", {
+      course: courses,
       message: "An error occurred while signing up"
     })
   }

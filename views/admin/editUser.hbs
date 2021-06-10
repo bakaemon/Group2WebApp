@@ -33,6 +33,19 @@
             </select>
         </div>
         <div class="form-group">
+            <small>Date of Birth</small><br>
+            <input type="date" name="dob" class="form-control" placeholder="Date of Birth" value="{{user.bio.DoB}}">
+        </div>
+        <div class="form-group">
+            <input type="text" name="education" placeholder="Education" class="form-control" value="{{user.bio.Education}}">
+        </div>
+        <div class="form-group">
+            <input type="text" name="lang" placeholder="Programming language" class="form-control" value="{{user.bio.Lang}}">
+        </div>
+        <div class="form-group">
+            <input type="number" name="score" placeholder="TOEIC score" class="form-control" value="{{user.bio.Score}}">
+        </div>
+        <div class="form-group">
             <button type="submit" class="btn btn-primary btn-lg">Edit</button>
         </div>
     </form>
