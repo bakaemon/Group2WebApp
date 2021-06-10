@@ -24,7 +24,7 @@
 
             <select name="role" class="form-control">
                 {{#each role}}
-                {{#ifCond this.name "===" currentrole}}
+                {{#ifCond this.name "===" user.role.name }}
                 <option value="{{_id}}" selected>{{name}}</option>
                 {{else}}
                 <option value="{{_id}}">{{name}}</option>
