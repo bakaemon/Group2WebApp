@@ -1,4 +1,6 @@
-module.exports = (hbs) => {
+const lib = require("./libraries");
+const hbs = lib.hbs;
+module.exports = () => {
     hbs.registerHelper('ifCond', function (v1, operator, v2, options) {
         switch (operator) {
             case '==':
@@ -24,7 +26,7 @@ module.exports = (hbs) => {
         }
     });
 
-    
+
     hbs.registerHelper('isdefined', function (value) {
         return value !== undefined;
     });
