@@ -3,10 +3,9 @@ const adminController = require("../controllers").admin
 module.exports = (app) => {
   app.use((req, res, next) => {
     const userSession = req.session.User;
-    if (userSession && userSession.role !== "admin") {
+    if (!userSession || userSession.role !== "admin") {
       res.redirect("/")
-    }
-    next();
+    } else return next();
   });
 
   app.post("/admin/add", adminController.addUser);
@@ -17,3 +16,4 @@ module.exports = (app) => {
   app.get("/admin/edit", adminController.getEditUser);
   app.get("/admin/delete", adminController.deleteUser);
 }
+

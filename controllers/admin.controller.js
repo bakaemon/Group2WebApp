@@ -60,13 +60,22 @@ exports.editUser = async (req, res) => {
       fullName: req.body.fullname,
       email: req.body.email,
       password: req.body.password,
+      bio: {
+        DoB: req.body.dob,
+        Education: req.body.education,
+        Lang: req.body.lang,
+        Score: req.body.score
+      },
       role: ObjectId(req.body.role)
     }
   }
   await User.updateOne({ _id: ObjectId(user_id) }, newValues, async (err, result) => {
     var message, roles = await Role.find({});
     if (err) message = err;
-    else message = `${result.nModified} user edited.`;
+    else {
+      if (result.nModified < 1) message = "User has not been edited.";
+      else message = "User has been edited.";
+    }
     var user = await User.findOne({ _id: ObjectId(user_id) }).populate({ path: "role", model: "Role" });
     res.render("admin/editUser", { title: "Edit user", message: message, user: user, role: roles });
   })
