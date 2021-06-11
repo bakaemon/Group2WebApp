@@ -7,5 +7,5 @@ module.exports = (app) => {
     app.get("/admin/course/addcategory", courseController.getAddCategory);
     //POST events
     app.post("/admin/course/addcourse", courseController.addCourse)
-    app.post("/admin//course/addcategory", courseController.addCategory);
+    app.post("/admin/course/addcategory", courseController.addCategory);
 }
