@@ -1,9 +1,21 @@
+const tools = require("../tools")
+const sortBy = tools.sortBy;
 const model = require("../models");
 const User = model.user;
 const Role = model.role;
 const { ObjectId } = require("../libraries").mongoose.Types;
 /* POST methods*/
 exports.addUser = async (req, res) => {
+  let roles = await Role.find({});
+  var notice = (msg) => {
+    res.render("admin/addUser", {
+      title: "Add user",
+      message: msg,
+      role: roles,
+      user: req.session.User,
+    })
+  };
+  if (roles.length == 0) notice("Can't not retrieve roles from database.");
   try {
     const username = req.body.username;
     const email = req.body.email;
@@ -14,16 +26,12 @@ exports.addUser = async (req, res) => {
     const lang = req.body.lang;
     const score = req.body.score;
     let role = req.body.role;
-    let roles = await Role.find({});
-    if (roles.length == 0) res.send("Can't not retrieve roles from database.");
     const check = await Role.findOne({ name: role });
     if (!check) {
-      return res.render("admin/addUser", {
-        message: `Role ${req.body.role} does not existed.`
-      });
+      return notice(`Role ${req.body.role} does not existed.`)
     }
 
-    if (await User.findOne({ $or: [{username: username}, {email: email}] })) return res.render("admin/addUser", { message: "User has already existed." });
+    if (await User.findOne({ $or: [{username: username}, {email: email}] })) return notice( "User has already existed.");
     const user = {
       username: username,
       fullName: fullName,
@@ -38,18 +46,13 @@ exports.addUser = async (req, res) => {
       role: check._id,
       
     };
-    await User.create(user);
-
-    res.render("admin/addUser", {
-      title: "Add user",
-      message: "User added successfully."
+    await User.create(user, (err)=> {
+      if (!err) return notice("User added successfully.");
     });
+    
   } catch (e) {
     console.log(e);
-    res.render("admin/addUser", {
-      title: "Add user",
-      message: "An error occurred while signing up"
-    })
+    notice("An error occurred while signing up.");
   }
 }
 exports.editUser = async (req, res) => {
@@ -77,7 +80,7 @@ exports.editUser = async (req, res) => {
       else message = "User has been edited.";
     }
     var user = await User.findOne({ _id: ObjectId(user_id) }).populate({ path: "role", model: "Role" });
-    res.render("admin/editUser", { title: "Edit user", message: message, user: user, role: roles });
+    res.render("admin/editUser", { title: "Edit user", message: message, user_data: user, role: roles, user: req.session.User });
   })
 }
 
@@ -103,7 +106,7 @@ exports.getUsers = async (req, res) => {
         .limit(resPerPage);
       numOfUsers = users.length;
     }
-
+    if (req.query.sort && ["role"].includes(req.query.sort)) users = sortBy(users, req.query.sort)
     for (var i = 1; i <= Math.ceil(numOfUsers / resPerPage); i++) pages.push(i);
 
     res.render("admin/getUsers", {
@@ -146,7 +149,7 @@ exports.getEditUser = async (req, res) => {
     var user = await User.findOne({ _id: ObjectId(user_id) }).populate({ path: "role", model: "Role" });
     var roles = await Role.find({});
     if (!user) res.redirect("back");
-    res.render("admin/editUser", { title: "Edit user", user: user, role: roles });
+    res.render("admin/editUser", { title: "Edit user", user_data: user, role: roles, user: req.session.User });
   }
   catch (e) { res.send(e) }
 }

@@ -4,27 +4,27 @@
         <hr>
         <div class="form-group">{{message}}</div>
         <div class="form-group">
-            <input type="text" class="form-control" name="fullname" value="{{user.fullName}}" required>
+            <input type="text" class="form-control" name="fullname" value="{{user_data.fullName}}" required>
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" name="username" placeholder="Username " value="{{user.username}}"
+            <input type="text" class="form-control" name="username" placeholder="Username " value="{{user_data.username}}"
                 required>
         </div>
         <div class="form-group">
-            <input type="email" class="form-control" name="email" placeholder="Email" value="{{user.email}}" required>
+            <input type="email" class="form-control" name="email" placeholder="Email" value="{{user_data.email}}" required>
         </div>
         <div class="form-group">
-            <input type="password" class="form-control" name="password" placeholder="Password" value="{{user.password}}"
+            <input type="password" class="form-control" name="password" placeholder="Password" value="{{user_data.password}}"
                 required>
         </div>
         <div class="form-group">
-            <p> Current role: {{user.role.name}}</p>
+            <p> Current role: {{user_data.role.name}}</p>
         </div>
         <div class="form-group">
 
             <select name="role" class="form-control">
                 {{#each role}}
-                {{#ifCond this.name "===" user.role.name }}
+                {{#ifCond this.name "===" user_data.role.name }}
                 <option value="{{_id}}" selected>{{name}}</option>
                 {{else}}
                 <option value="{{_id}}">{{name}}</option>
@@ -34,20 +34,20 @@
         </div>
         <div class="form-group">
             <small>Date of Birth</small><br>
-            <input type="date" name="dob" class="form-control" placeholder="Date of Birth" value="{{user.bio.DoB}}">
+            <input type="date" name="dob" class="form-control" placeholder="Date of Birth" value="{{user_data.bio.DoB}}">
         </div>
         <div class="form-group">
-            <input type="text" name="education" placeholder="Education" class="form-control" value="{{user.bio.Education}}">
+            <input type="text" name="education" placeholder="Education" class="form-control" value="{{user_data.bio.Education}}">
         </div>
         <div class="form-group">
-            <input type="text" name="lang" placeholder="Programming language" class="form-control" value="{{user.bio.Lang}}">
+            <input type="text" name="lang" placeholder="Programming language" class="form-control" value="{{user_data.bio.Lang}}">
         </div>
         <div class="form-group">
-            <input type="number" name="score" placeholder="TOEIC score" class="form-control" value="{{user.bio.Score}}">
+            <input type="number" name="score" placeholder="TOEIC score" class="form-control" value="{{user_data.bio.Score}}">
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-lg">Edit</button>
         </div>
     </form>
-    <div class="hint-text">Go back to <a href="/admin/users">user control panel</a></div>
+    <div class="hint-text">Go back to <a href="/admin/users">user_data control panel</a></div>
 </div>

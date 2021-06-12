@@ -6,6 +6,7 @@ const Role = require("./models/role.model");
 const routes = require("./routes/");
 
 
+
 /* Middlewares */
 // express session initialization
 app.use(lib.session({
@@ -46,7 +47,7 @@ routes.coursecontrol(app);
 
 /* 404 handling */
 app.use((req, res, next) => {
-  res.render("404", { title: "Not found!" });
+  res.render("404", { title: "Not found!", user: req.session.User });
 })
 var port = process.env.PORT || 3000; //use port 3000 unless there are preconfigured ports
 app.listen(port);
