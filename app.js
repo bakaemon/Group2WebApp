@@ -2,8 +2,9 @@ const lib = require("./libraries"); //get exported variables from this module
 const app = lib.express();
 const mongoose = lib.mongoose;
 const bodyParser = lib.bodyParser;
-const Role = require("./models/role.model");
+
 const routes = require("./routes/");
+const configs = require("./configs");
 
 
 
@@ -32,7 +33,7 @@ mongoose.connect(uri, {
   useUnifiedTopology: true
 }).then(async () => { //execute on success
   console.log("Connected to database successfully.");
-  await roleInitialize();
+  await configs.roles.roleInitialize();
 }).catch((e) => { //execute on error, print error on console and exit
   console.log(e);
   process.exit();
@@ -52,27 +53,3 @@ app.use((req, res, next) => {
 var port = process.env.PORT || 3000; //use port 3000 unless there are preconfigured ports
 app.listen(port);
 
-/**
- * Auto-generate roles after successfully connected to db
- */
-const roleInitialize = async () => {
-  try {
-    const count = await Role.estimatedDocumentCount();
-    if (count === 0) {
-      await Role.create({ name: "admin" }); //create role
-      console.log("Roles admin is added.")
-
-      await Role.create({ name: "staff" });
-      console.log("Roles staff is added.")
-
-      await Role.create({ name: "trainer" });
-      console.log("Roles trainer is added.")
-
-      await Role.create({ name: "trainee" });
-      console.log("Roles trainee is added.")
-
-    }
-  } catch (e) {
-    console.log(e)
-  }
-}

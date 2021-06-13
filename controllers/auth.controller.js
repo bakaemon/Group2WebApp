@@ -2,10 +2,18 @@ const models = require("../models"); // get template model for data handling fro
 const User = models.user;
 const Role = models.role;
 const Course = models.course;
-const { bcrypt } = require("../libraries")
+// const { bcrypt } = require("../libraries")
 
 exports.signup = async (req, res) => {
   const courses = await Course.find({});
+  var notice = (msg) => {
+    res.render("auth/signup", {
+      title: "Sign up",
+      course: courses,
+      message: msg,
+      user: req.session.User
+    });
+  };
   try {
     const username = req.body.username;
     const email = req.body.email;
@@ -16,21 +24,11 @@ exports.signup = async (req, res) => {
     const lang = req.body.lang;
     const score = req.body.score;
     const role = await Role.findOne({ name: "trainee" });
-    if (!role) {
-      return res.render('./', {
-        course: courses,
-        message: `Role ${req.body.role} does not existed.`
-      });
-    }
+    if (!role) return notice(`Role ${req.body.role} does not existed.`)
 
-    if (password !== req.body.confirm_password) {
-      return res.render("auth/signup", {
-        course: courses,
-        message: "Password and confirm password are not matched."
-      })
-    }
+    if (password !== req.body.confirm_password) return notice("Password and confirm password are not matched.");
 
-    if (await User.findOne({ username: username })) return res.render("auth/signup", { message: "User has already existed." });
+    if (await User.findOne({ username: username })) return notice("User has already existed.");
     const user = {
       username: username,
       fullName: fullName,
@@ -43,24 +41,25 @@ exports.signup = async (req, res) => {
         Score: score
       },
       role: role._id,
-      
+
     };
     await User.create(user);
 
-    res.render("auth/signup", {
-      course: courses,
-      message: "Sign up successfully."
-    });
+    notice("Sign up successfully.")
   } catch (e) {
     console.log(e);
-    res.render("auth/signup", {
-      course: courses,
-      message: "An error occurred while signing up"
-    })
+    notice("An error occurred while signing up");
   }
 }
 
 exports.login = async (req, res) => {
+  if (req.session.User) return redirect("/");
+  var notice = (msg) => {
+    res.render("auth/login", {
+      title: "Login",
+      message: msg
+    });
+  }
   try {
     const loginValue = req.body.login_value;
     const password = req.body.password;
@@ -69,15 +68,11 @@ exports.login = async (req, res) => {
       .populate({ path: "role", model: "Role", select: "-__v" });
 
     if (!user) {
-      return res.render("auth/login", {
-        message: "Username or email doesn't exist."
-      });
+      return notice("Username or email doesn't exist.");
     }
 
     if (user.password !== password) {
-      return res.render("auth/login", {
-        message: "Incorrect password."
-      });
+      return notice("Incorrect password.");
     }
 
     // Store session first be for redirect.
@@ -88,12 +83,10 @@ exports.login = async (req, res) => {
     };
     if (req.body.remember) req.session.cookie.maxAge = 365 * 24 * 60 * 60 * 1000; //expires after a year
     else req.session.cookie.expires = false; //expire after closing browser
-    res.redirect("/?success=true");
+    res.redirect("/");
   } catch (e) {
     console.log(e);
-    res.render("auth/login", {
-      message: "An error occurred while login."
-    });
+    notice("An error occurred while login.");
   }
 }
 exports.logout = (req, res) => {
@@ -104,9 +97,9 @@ exports.logout = (req, res) => {
   res.redirect("/auth/login");
 }
 exports.getSignup = (req, res) => {
-  res.render("auth/signup", {title: "Sign up"});
+  res.render("auth/signup", { title: "Sign up", user: req.session.User });
 }
 
 exports.getLogin = (req, res) => {
-  res.render("auth/login", {title: "Login"});
+  res.render("auth/login", { title: "Login", user: req.session.User });
 }
