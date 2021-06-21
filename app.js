@@ -40,6 +40,7 @@ mongoose.connect(uri, {
 })
 
 // Routes
+routes.api(app);
 routes.auth(app);
 routes.home(app);
 routes.test(app);
