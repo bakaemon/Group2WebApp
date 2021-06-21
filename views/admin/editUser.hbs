@@ -18,17 +18,9 @@
                 required>
         </div>
         <div class="form-group">
-            <p> Current role: {{user_data.role.name}}</p>
-        </div>
-        <div class="form-group">
-
-            <select name="role" class="form-control">
+            <select name="role" class="form-control" id="role">
                 {{#each role}}
-                {{#ifCond this.name "===" user_data.role.name }}
-                <option value="{{_id}}" selected>{{name}}</option>
-                {{else}}
                 <option value="{{_id}}">{{name}}</option>
-                {{/ifCond}}
                 {{/each}}
             </select>
         </div>
@@ -49,5 +41,10 @@
             <button type="submit" class="btn btn-primary btn-lg">Edit</button>
         </div>
     </form>
-    <div class="hint-text">Go back to <a href="/admin/users">user_data control panel</a></div>
+    <div class="hint-text">Go back to <a href="/admin/users">user control panel</a></div>
 </div>
+<script>
+    $(document).ready(() => {
+        $("select#role option[value={{{user_data.role._id}}}]").attr('selected','selected');
+    });
+</script>
