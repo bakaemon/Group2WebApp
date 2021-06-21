@@ -74,13 +74,13 @@ exports.login = async (req, res) => {
     if (user.password !== password) {
       return notice("Incorrect password.");
     }
-
-    // Store session first be for redirect.
+    // Store session first before redirect.
     req.session.User = {
       username: user.username,
       fullname: user.fullName,
       role: user.role.name
     };
+    
     if (req.body.remember) req.session.cookie.maxAge = 365 * 24 * 60 * 60 * 1000; //expires after a year
     else req.session.cookie.expires = false; //expire after closing browser
     res.redirect("/");

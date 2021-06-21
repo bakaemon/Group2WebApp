@@ -1,5 +1,6 @@
 const models = require("../models")
 const Course = models.course;
+const User = models.user
 const CourseCategory = models.courseCategory;
 const { ObjectId } = require("../libraries").mongoose.Types;
 //GET methods
@@ -7,15 +8,26 @@ exports.getAddCourse = async (req, res) => {
     const category = await CourseCategory.find({});
     res.render("admin/course/addCourse", {
         title: "Add course",
-        category: category
+        category: category,
+        user: req.session.User,
     });
 }
-exports.getAddCategory = async (req, res) => {
+exports.getAddCategory = (req, res) => {
     res.render("admin/course/addCategory", {
-        title: "Add Course Category"
+        title: "Add Course Category",
+        user: req.session.User,
     })
 }
-
+exports.getAddUserToCourse = async (req, res) => {
+    var users = await User.find({});
+    var courses = await Course.find({});
+    res.render("admin/course/addUserToCourse", {
+        title: "Add user to course",
+        user_data: users,
+        course: courses,
+        user: req.session.User,
+    })
+}
 //POST method
 exports.addCourse = async (req, res) => {
     const category = await CourseCategory.find({});

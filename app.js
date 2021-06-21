@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view options', { layout: '/layouts/main' });
-app.set("view engine", ".hbs");
+app.set("view engine", "hbs");
 app.use(lib.express.static(lib.path.join(__dirname, '/public')));
 //register hbs functionalities
 require('./handlebars')();
