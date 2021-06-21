@@ -7,7 +7,7 @@ exports.getapi = async (req, res) => {
   switch (req.query.id) {
     case "user":
       var json = {
-        data: await User.find({}, {password: 0, fullName: 0}).select("-__v")
+        data: await User.find({}, {password: 0}).select("-__v")
       }
       res.end(JSON.stringify(json));
       break;
