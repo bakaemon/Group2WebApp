@@ -4,6 +4,40 @@ const User = models.user
 const CourseCategory = models.courseCategory;
 const { ObjectId } = require("../libraries").mongoose.Types;
 //GET methods
+exports.getCourses = async (req, res) => {
+    const page = req.params.page || 1;
+    try {
+        var regexQuery = { "$regex": req.query.s, "$options": "i" };
+        const resPerPage = 5;
+        let items, numOfItems = 0, pages = [];
+        if (!req.query.s) {
+            items = await Course.find({})
+                .populate({ path: "category", models: "CourseCategory", select: "-__v" })
+                .skip((resPerPage * page) - resPerPage)
+                .limit(resPerPage);
+            numOfItems = items.length;
+        } else {
+            items = await Course.find({ name: regexQuery })
+                .populate({ path: "category", models: "CourseCategory", select: "-__v" })
+                .skip((resPerPage * page) - resPerPage)
+                .limit(resPerPage);
+            numOfItems = items.length;
+        }
+        for (var i = 1; i <= Math.ceil(numOfItems / resPerPage); i++) pages.push(i);
+        res.render("admin/course/getCourses", {
+            title: "Course control panel",
+            user: req.session.User,
+            courses: items,
+            page: page,
+            numOfItems: numOfItems,
+            pages: pages,
+            pagelength: Math.ceil(numOfItems / resPerPage)
+        });
+
+    } catch (e) {
+        console.log(e);
+    }
+}
 exports.getAddCourse = async (req, res) => {
     const category = await CourseCategory.find({});
     res.render("admin/course/addCourse", {
@@ -97,8 +131,8 @@ exports.addUserToCourse = async (req, res) => {
 
         await Course.updateOne({ name: course }, { $addToSet: { members: db_user._id } }, (err, result) => {
             if (err) return notice("Unable to add user to course");
-            if (result.nModified == 0) return notice("User '" +db_user.username+"' has already in course.");
-            notice("Added user '" + db_user.username + "' to "+ course);
+            if (result.nModified == 0) return notice("User '" + db_user.username + "' has already in course.");
+            notice("Added user '" + db_user.username + "' to " + course);
         });
     } catch (e) {
         notice("An error hs occurred.");

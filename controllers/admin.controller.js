@@ -94,14 +94,14 @@ exports.getUsers = async (req, res) => {
     let users, numOfUsers = 0, pages = [];
     if (!searchQuery) {
       users = await User.find({})
-        .populate({ path: "role", model: "Role", select: "__v" })
+        .populate({ path: "role", model: "Role", select: "-__v" })
         .skip((resPerPage * page) - resPerPage)
         .limit(resPerPage);
       numOfUsers = users.length;
     } else {
       const query = { $or: [{ email: regexQuery }, { fullName: regexQuery }, { username: regexQuery }] }
       users = await User.find(query)
-        .populate({ path: "role", model: "Role", select: "__v" })
+        .populate({ path: "role", model: "Role", select: "-__v" })
         .skip((resPerPage * page) - resPerPage)
         .limit(resPerPage);
       numOfUsers = users.length;
