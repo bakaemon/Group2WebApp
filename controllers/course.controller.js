@@ -75,3 +75,34 @@ exports.addCategory = async (req, res) => {
         res.end();
     }
 }
+exports.addUserToCourse = async (req, res) => {
+    var users = await User.find({});
+    var courses = await Course.find({});
+    var notice = (msg) => {
+        res.render("admin/course/addUserToCourse", {
+            title: "Add user to course",
+            message: msg,
+            user_data: users,
+            course: courses,
+            user: req.session.User,
+        });
+    };
+    try {
+        var username = req.body.username;
+        var course = req.body.course;
+        if (!username || !course)
+            return notice("Must username or choosing valid course.");
+        var db_user = await User.findOne({ username: username });
+        if (db_user.length == 0) return notice("User did not exist.");
+
+        await Course.updateOne({ name: course }, { $addToSet: { members: db_user._id } }, (err, result) => {
+            if (err) return notice("Unable to add user to course");
+            if (result.nModified == 0) return notice("User '" +db_user.username+"' has already in course.");
+            notice("Added user '" + db_user.username + "' to "+ course);
+        });
+    } catch (e) {
+        notice("An error hs occurred.");
+        console.log(e);
+    }
+
+}

@@ -9,4 +9,5 @@ module.exports = (app) => {
     //POST events
     app.post("/admin/course/addcourse", courseController.addCourse)
     app.post("/admin/course/addcategory", courseController.addCategory);
+    app.post('/admin/course/addusertocourse' , courseController.addUserToCourse)
 }

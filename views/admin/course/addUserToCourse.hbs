@@ -3,7 +3,9 @@
     <form action="" method="post">
         <h2>Course Inviting</h2>
         <hr>
-        <div class="form-group">{{message}}</div>
+        <div class="form-group">
+            <p><small style="color: red;">{{message}}</small></p>
+        </div>
         <div class="autocomplete">
             <div class="form-group">
                 <input type="text" class="form-control" name="username" placeholder="Username" id="userauto" required>
@@ -11,9 +13,9 @@
 
         </div>
         <div class="form-group">
-            <select name="category" class="form-control">
+            <select name="course" class="form-control">
                 {{#each course}}
-                <option value="{{_id}}">{{name}}</option>
+                <option value="{{name}}">{{name}}</option>
                 {{/each}}
             </select>
         </div>
