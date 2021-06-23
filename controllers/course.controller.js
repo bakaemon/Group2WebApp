@@ -141,12 +141,12 @@ exports.addUserToCourse = async (req, res) => {
         };
         if (trainee) {
             var trainee_db = await User.findOne({ username: trainee });
-            update(trainee_db);
+            if (trainee_db) update(trainee_db);
+            else notice("User did not exist.");
         } else if (trainer) {
             var trainer_db = await User.findOne({ username: trainer });
-            update(trainer_db);
-        } else {
-            notice("User did not exist.");
+            if (trainer_db) update(trainer_db);
+            else notice("User did not exist.");
         }
     } catch (e) {
         notice("An error hs occurred.");
