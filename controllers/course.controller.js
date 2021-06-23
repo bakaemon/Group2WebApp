@@ -14,14 +14,16 @@ exports.getCourses = async (req, res) => {
             items = await Course.find({});
             numOfItems = items.length;
             items = await Course.find({})
+                .sort({ name: 1 })
                 .populate({ path: "category", models: "CourseCategory", select: "-__v" })
                 .skip((resPerPage * page) - resPerPage)
                 .limit(resPerPage);
-            
+
         } else {
-            items = await Course.find({});
+            items = await Course.find({ name: regexQuery });
             numOfItems = items.length;
             items = await Course.find({ name: regexQuery })
+                .sort({ name: 1 })
                 .populate({ path: "category", models: "CourseCategory", select: "-__v" })
                 .skip((resPerPage * page) - resPerPage)
                 .limit(resPerPage);

@@ -96,6 +96,7 @@ exports.getUsers = async (req, res) => {
       users = await User.find();
       numOfUsers = users.length;
       users = await User.find({})
+        .sort({ username: 1 })
         .populate({ path: "role", model: "Role", select: "-__v" })
         .skip((resPerPage * page) - resPerPage)
         .limit(resPerPage);
@@ -104,6 +105,7 @@ exports.getUsers = async (req, res) => {
       users = await User.find(query)
       numOfUsers = users.length;
       users = await User.find(query)
+        .sort({ username: 1 })
         .populate({ path: "role", model: "Role", select: "-__v" })
         .skip((resPerPage * page) - resPerPage)
         .limit(resPerPage);
