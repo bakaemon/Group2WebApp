@@ -1,13 +1,4 @@
-<script>
-    /**
-    * Prompt to delete object by redirecting
-    * @param {String} id
-    */
-    function deleteitem(id) {
-        var allow = confirm("Are you sure to delete?");
-        if (allow) window.location.href = "/admin/delete?id="+id;
-    }
-</script>
+
 <div class="container-xl">
     <div class="table-responsive">
         <div class="table-wrapper">
@@ -86,3 +77,13 @@
         </div>
     </div>
 </div>
+<script>
+    /**
+    * Prompt to delete object by redirecting
+    * @param {String} id
+    */
+    function deleteitem(id) {
+        var allow = confirm("Are you sure to delete?");
+        if (allow) window.location.href = "/admin/delete?id="+id;
+    }
+</script>
