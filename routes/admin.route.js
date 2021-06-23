@@ -7,13 +7,20 @@ module.exports = (app) => {
       res.redirect("/")
     } else return next();
   });
-
-  app.post("/admin/add", adminController.addUser);
-  app.get("/admin/add", adminController.getAddUser);
-  app.post("/admin/edit", adminController.editUser)
-
-  app.get("/admin/users", adminController.getUsers);
-  app.get("/admin/edit", adminController.getEditUser);
-  app.get("/admin/delete", adminController.deleteUser);
+  /**
+* Allow to establish both GET and POST event with the same URL request
+* @param {String} URL 
+* @param {Function} getEvent 
+* @param {Function} postEvent 
+*/
+  const eventhandler = (URL, getEvent, postEvent) => {
+    if (postEvent !== undefined)
+      app.post(URL, postEvent);
+    app.get(URL, getEvent);
+  }
+  eventhandler("/admin/add", adminController.getAddUser, adminController.addUser);
+  eventhandler("/admin/users", adminController.getUsers);
+  eventhandler("/admin/edit", adminController.getEditUser, adminController.editUser);
+  eventhandler("/admin/delete", adminController.deleteUser);
 }
 

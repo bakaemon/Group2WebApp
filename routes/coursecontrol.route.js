@@ -1,13 +1,19 @@
 const courseController = require("../controllers").course;
 
 module.exports = (app) => {
-    //GET events
-    app.get("/admin/course/", courseController.getCourses)
-    app.get("/admin/course/addcourse", courseController.getAddCourse);
-    app.get("/admin/course/addcategory", courseController.getAddCategory);
-    app.get("/admin/course/addusertocourse", courseController.getAddUserToCourse);
-    //POST events
-    app.post("/admin/course/addcourse", courseController.addCourse)
-    app.post("/admin/course/addcategory", courseController.addCategory);
-    app.post('/admin/course/addusertocourse' , courseController.addUserToCourse)
+    /**
+    * Allow to establish both GET and POST event with the same URL request
+    * @param {String} URL 
+    * @param {Function} getEvent 
+    * @param {Function} postEvent 
+    */
+    const eventhandler = (URL, getEvent, postEvent) => {
+        if (postEvent !== undefined)
+            app.post(URL, postEvent);
+        app.get(URL, getEvent);
+    }
+    eventhandler("/admin/course/", courseController.getCourses)
+    eventhandler("/admin/course/addcourse", courseController.getAddCourse, courseController.addCourse);
+    eventhandler("/admin/course/addcategory", courseController.getAddCategory, courseController.addCategory);
+    eventhandler("/admin/course/assign", courseController.getAddUserToCourse, courseController.addUserToCourse);
 }
