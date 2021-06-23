@@ -1,3 +1,13 @@
+<script>
+    /**
+    * Prompt to delete object by redirecting
+    * @param {String} id
+    */
+    function deleteitem(id) {
+        var allow = confirm("Are you sure to delete?");
+        if (allow) window.location.href = "/admin/delete?id="+id;
+    }
+</script>
 <div class="container-xl">
     <div class="table-responsive">
         <div class="table-wrapper">
@@ -44,7 +54,7 @@
                                     class="material-icons">&#xE417;</i></a>
                             <a href="/admin/edit?id={{_id}}" class="edit" title="Edit" data-toggle="tooltip"><i
                                     class="material-icons">&#xE254;</i></a>
-                            <a href="/admin/delete?id={{_id}}" class="delete" title="Delete" data-toggle="tooltip"><i
+                            <a href="javascript:deleteitem('{{_id}}')" class="delete" title="Delete" data-toggle="tooltip"><i
                                     class="material-icons">&#xE872;</i></a>
                         </td>
                     </tr>
