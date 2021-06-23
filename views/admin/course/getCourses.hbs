@@ -51,7 +51,7 @@
                                     class="material-icons">&#xE417;</i></a>
                             <a href="/admin/course/edit?id={{_id}}" class="edit" title="Edit" data-toggle="tooltip"><i
                                     class="material-icons">&#xE254;</i></a>
-                            <a href="/admin/course/delete?id={{_id}}" class="delete" title="Delete"
+                            <a href="javascript:deleteitem('{{_id}}')" class="delete" title="Delete"
                                 data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
                         </td>
                     </tr>
@@ -61,10 +61,8 @@
             <div class="clearfix">
                 <div class="hint-text">Found <b>{{numOfItems}}</b> entries</div>
                 <ul class="pagination">
-                    {{#ifCond ifCond page "==" 1}}
-                    <li class="page-item disabled"><a href="" onclick="false">Previous</a></li>
-                    {{else}}
-                    <li class="page-item"><a href="?page={{minus page 1}}">Previous</a></li>
+                    {{#ifCond ifCond page ">" 1}}
+                    <li class="page-item"><a href="?page={{math page '-' 1}}">Previous</a></li>
                     {{/ifCond}}
                     {{#each pages}}
                     {{#ifCond this "==" page}}
@@ -73,13 +71,21 @@
                     <li class="page-item"><a href="?page={{this}}" class="page-link">{{this}}</a></li>
                     {{/ifCond}}
                     {{/each}}
-                    {{#ifCond page "==" pagelength}}
-                    <li class="page-item disabled"><a href="" class="pager-link" onclick="false">Next</a></li>
-                    {{else}}
-                    <li class="page-item"><a href="?page={{plus page 1}}" class="pager-link">Next</a></li>
+                    {{#ifCond page ">" pagelength}}
+                    <li class="page-item"><a href="?page={{math page '+' 1}}" class="pager-link">Next</a></li>
                     {{/ifCond}}
                 </ul>
             </div>
         </div>
     </div>
 </div>
+<script>
+    /**
+    * Prompt to delete object by redirecting
+    * @param {String} id
+    */
+    function deleteitem(id) {
+        var allow = confirm("Are you sure to delete?");
+        if (allow) window.location.href = "/admin/course/delete_course?id="+id;
+    }
+</script>

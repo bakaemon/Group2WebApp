@@ -31,7 +31,7 @@ exports.addUser = async (req, res) => {
       return notice(`Role ${req.body.role} does not existed.`)
     }
 
-    if (await User.findOne({ $or: [{username: username}, {email: email}] })) return notice( "User has already existed.");
+    if (await User.findOne({ $or: [{ username: username }, { email: email }] })) return notice("User has already existed.");
     const user = {
       username: username,
       fullName: fullName,
@@ -44,12 +44,12 @@ exports.addUser = async (req, res) => {
         Score: score
       },
       role: check._id,
-      
+
     };
-    await User.create(user, (err)=> {
+    await User.create(user, (err) => {
       if (!err) return notice("User added successfully.");
     });
-    
+
   } catch (e) {
     console.log(e);
     notice("An error occurred while signing up.");
@@ -86,29 +86,29 @@ exports.editUser = async (req, res) => {
 
 /* GET methods */
 exports.getUsers = async (req, res) => {
-  const page = req.params.page || 1; // Page 
+  const page = req.query.page || 1; // Page 
   try {
     const searchQuery = req.query.search_query;
     var regexQuery = { "$regex": searchQuery, "$options": "i" }
     const resPerPage = 5; // results per page
     let users, numOfUsers = 0, pages = [];
     if (!searchQuery) {
+      users = await User.find();
+      numOfUsers = users.length;
       users = await User.find({})
         .populate({ path: "role", model: "Role", select: "-__v" })
         .skip((resPerPage * page) - resPerPage)
         .limit(resPerPage);
-      numOfUsers = users.length;
     } else {
       const query = { $or: [{ email: regexQuery }, { fullName: regexQuery }, { username: regexQuery }] }
+      users = await User.find(query)
+      numOfUsers = users.length;
       users = await User.find(query)
         .populate({ path: "role", model: "Role", select: "-__v" })
         .skip((resPerPage * page) - resPerPage)
         .limit(resPerPage);
-      numOfUsers = users.length;
     }
-    if (req.query.sort && ["role"].includes(req.query.sort)) users = sortBy(users, req.query.sort)
     for (var i = 1; i <= Math.ceil(numOfUsers / resPerPage); i++) pages.push(i);
-
     res.render("admin/getUsers", {
       title: "User control panel",
       user: req.session.User,
@@ -141,7 +141,7 @@ exports.deleteUser = async (req, res) => {
 exports.getAddUser = async (req, res) => {
   let roles = await Role.find({});
   if (roles.length == 0) res.send("Can't not retrieve roles from database.");
-  res.render("admin/addUser", {title: "Add user", role: roles})
+  res.render("admin/addUser", { title: "Add user", role: roles })
 }
 exports.getEditUser = async (req, res) => {
   var user_id = req.query.id;

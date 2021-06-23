@@ -11,17 +11,20 @@ exports.getCourses = async (req, res) => {
         const resPerPage = 5;
         let items, numOfItems = 0, pages = [];
         if (!req.query.s) {
+            items = await Course.find({});
+            numOfItems = items.length;
             items = await Course.find({})
                 .populate({ path: "category", models: "CourseCategory", select: "-__v" })
                 .skip((resPerPage * page) - resPerPage)
                 .limit(resPerPage);
-            numOfItems = items.length;
+            
         } else {
+            items = await Course.find({});
+            numOfItems = items.length;
             items = await Course.find({ name: regexQuery })
                 .populate({ path: "category", models: "CourseCategory", select: "-__v" })
                 .skip((resPerPage * page) - resPerPage)
                 .limit(resPerPage);
-            numOfItems = items.length;
         }
         for (var i = 1; i <= Math.ceil(numOfItems / resPerPage); i++) pages.push(i);
         res.render("admin/course/getCourses", {
@@ -98,8 +101,9 @@ exports.addCategory = async (req, res) => {
             name: req.body.name,
             description: req.body.description
         };
-        if (await CourseCategory.find(template)) return notice("The category has already existed");
-        await CourseCategory.create(template, (err) => {
+        var findCat = await CourseCategory.find(template)
+        if (findCat.length > 0) return notice("The category has already existed");
+        await CourseCategory.create(template, (err, result) => {
             if (err) return notice("Unable to add course category to database");
             notice("Category added.");
         });
@@ -122,18 +126,28 @@ exports.addUserToCourse = async (req, res) => {
         });
     };
     try {
-        var username = req.body.username;
+        var trainer = req.body.trainerusername;
+        var trainee = req.body.traineeusername;
         var course = req.body.course;
-        if (!username || !course)
-            return notice("Must username or choosing valid course.");
-        var db_user = await User.findOne({ username: username });
-        if (db_user.length == 0) return notice("User did not exist.");
-
-        await Course.updateOne({ name: course }, { $addToSet: { members: db_user._id } }, (err, result) => {
-            if (err) return notice("Unable to add user to course");
-            if (result.nModified == 0) return notice("User '" + db_user.username + "' has already in course.");
-            notice("Added user '" + db_user.username + "' to " + course);
-        });
+        if (!trainee && !trainer)
+            return notice("You must input at least one of either trainer or trainee.");
+        const update = async (newmembers) => {
+            await Course.updateOne({ name: course }, { $addToSet: { members: newmembers._id } }, (err, result) => {
+                if (err) return notice("Unable to add user to course");
+                if (result.nModified == 0) return notice("User '" + newmembers.username + "'  has already in course.");
+                console.log(result.nModified);
+                return notice("Added user '" + newmembers.username + "' to " + course);
+            });
+        };
+        if (trainee) {
+            var trainee_db = await User.findOne({ username: trainee });
+            update(trainee_db);
+        } else if (trainer) {
+            var trainer_db = await User.findOne({ username: trainer });
+            update(trainer_db);
+        } else {
+            notice("User did not exist.");
+        }
     } catch (e) {
         notice("An error hs occurred.");
         console.log(e);

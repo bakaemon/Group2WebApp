@@ -8,9 +8,15 @@
         </div>
         <div class="autocomplete">
             <div class="form-group">
-                <input type="text" class="form-control" name="username" placeholder="Username" id="userauto" required>
+                <input type="text" class="form-control" name="trainerusername" placeholder="Trainer's Username..." id="userauto-trainer"
+                >
             </div>
-
+        </div>
+        <div class="autocomplete">
+            <div class="form-group">
+                <input type="text" class="form-control" name="traineeusername" placeholder="Trainee's Username..." id="userauto-trainee"
+                 >
+            </div>
         </div>
         <div class="form-group">
             <select name="course" class="form-control">
@@ -23,15 +29,23 @@
             <button type="submit" class="btn btn-primary btn-lg">Add</button>
         </div>
     </form>
-    <div class="hint-text">Go back to <a href="/course/control">course control panel</a></div>
+    <div class="hint-text">Go back to <a href="/course/">course control panel</a></div>
 </div>
 <script>
     $.ajax({
-        url: 'http://localhost:3000/api?id=user',
+        url: 'http://localhost:3000/api?id=user&refby=trainer',
         type: 'GET',
         dataType: "json",
         success: (users) => {
-            autocomplete_v2(document.getElementById("userauto"), users["data"], "username")
+            autocomplete_v2(document.getElementById("userauto-trainer"), users["data"], "username")
+        }
+    });
+        $.ajax({
+        url: 'http://localhost:3000/api?id=user&refby=trainee',
+        type: 'GET',
+        dataType: "json",
+        success: (users) => {
+            autocomplete_v2(document.getElementById("userauto-trainee"), users["data"], "username")
         }
     });
 
