@@ -16,4 +16,5 @@ module.exports = (app) => {
     eventhandler("/admin/course/addcourse", courseController.getAddCourse, courseController.addCourse);
     eventhandler("/admin/course/addcategory", courseController.getAddCategory, courseController.addCategory);
     eventhandler("/admin/course/assign", courseController.getAddUserToCourse, courseController.addUserToCourse);
+    eventhandler("/admin/course/view", courseController.getViewCourse);
 }

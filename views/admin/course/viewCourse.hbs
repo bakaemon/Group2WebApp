@@ -1,0 +1,77 @@
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="show-entries dropdown show">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">&#xE147;</i>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/admin/course/addcourse">Add course</a>
+                                <a class="dropdown-item" href="/admin/course/addcategory">Add category</a>
+                                <a class="dropdown-item" href="/admin/course/assign">Assign user to course</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <h2 class="text-center">Members of {{course.name}}</b></h2>
+                    </div>
+                    {{!-- <div class="col-sm-4">
+                        <form action="" method="GET">
+                            <div class="search-box">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>
+                                    <input type="text" class="form-control" placeholder="Search&hellip;" name="s">
+                                </div>
+                            </div>
+                        </form>
+                    </div> --}}
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Username <i class="fa fa-sort"></i></th>
+                        <th>Fullname</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each course.members}}
+                    <tr>
+                        <td>{{username}}</td>
+                        <td>{{fullName}}</td>
+                        <td>{{role.name}}</td>
+                        <td>
+                            <a href="/admin/course/view?id={{_id}}" class="view" title="View" data-toggle="tooltip"><i
+                                    class="material-icons">&#xE417;</i></a>
+                            <a href="/admin/course/edit?id={{_id}}" class="edit" title="Edit" data-toggle="tooltip"><i
+                                    class="material-icons">&#xE254;</i></a>
+                            <a href="javascript:deleteitem('{{_id}}')" class="delete" title="Delete"
+                                data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            <div class="clearfix">
+                <small class="text-center"><a href="/admin/course">Course control panel</a></small>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    /**
+    * Prompt to delete object by redirecting
+    * @param {String} id
+    */
+    function deleteitem(id) {
+        var allow = confirm("Are you sure to delete?");
+        if (allow) window.location.href = "/admin/course/view?id={{{course._id}}}&deluser=" + id;
+    }
+</script>

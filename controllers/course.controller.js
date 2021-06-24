@@ -67,6 +67,49 @@ exports.getAddUserToCourse = async (req, res) => {
         user: req.session.User,
     })
 }
+exports.getViewCourse = async (req, res) => {
+    if (!req.query.id) res.redirect("back");
+    try {
+        const resPerPage = 0;
+        var pages = [];
+        var page = req.query.page || 1;
+        var countItems = await Course.aggregate(
+            [{
+                $match: { _id: ObjectId(req.query.id) }
+            },
+            {
+                $project: {
+                    members: { $size: "$members" }
+                }
+            }]
+        );
+        // var numOfItems = countItems[0].members;
+        var course = await Course.findOne({ _id: req.query.id })
+            .populate({
+                path: "members",
+                models: "User",
+                populate: {
+                    path: "role",
+                    models: "Role"
+                },
+                select: "-__v"
+            })
+            // .skip((resPerPage * page) - resPerPage)
+            // .limit(resPerPage);
+        // for (var i = 1; i <= Math.ceil(numOfItems / resPerPage); i++) pages.push(i);
+        res.render("admin/course/viewCourse", {
+            title: "View ",
+            course: course,
+            // numOfItems: numOfItems,
+            // page: page,
+            // pages: pages,
+            // pagelength: Math.ceil(numOfItems / resPerPage),
+            user: req.session.User
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}
 //POST method
 exports.addCourse = async (req, res) => {
     const category = await CourseCategory.find({});
