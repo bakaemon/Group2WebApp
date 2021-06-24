@@ -75,19 +75,19 @@ exports.getAddUserToCourse = async (req, res) => {
 exports.getViewCourse = async (req, res) => {
     if (!req.query.id) res.redirect("back");
     try {
-        const resPerPage = 0;
-        var pages = [];
-        var page = req.query.page || 1;
-        var countItems = await Course.aggregate(
-            [{
-                $match: { _id: ObjectId(req.query.id) }
-            },
-            {
-                $project: {
-                    members: { $size: "$members" }
-                }
-            }]
-        );
+        // const resPerPage = 0;
+        // var pages = [];
+        // var page = req.query.page || 1;
+        // var countItems = await Course.aggregate(
+        //     [{
+        //         $match: { _id: ObjectId(req.query.id) }
+        //     },
+        //     {
+        //         $project: {
+        //             members: { $size: "$members" }
+        //         }
+        //     }]
+        // );
         // var numOfItems = countItems[0].members;
         var course = await Course.findOne({ _id: req.query.id })
             .populate({
