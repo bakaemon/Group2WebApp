@@ -26,6 +26,8 @@ exports.addUser = async (req, res) => {
     const lang = req.body.lang;
     const score = req.body.score;
     let role = req.body.role;
+    let roles = await Role.find({});
+    if (roles.length == 0) res.send("Can't not retrieve roles from database.");
     const check = await Role.findOne({ name: role });
     if (!check) {
       return notice(`Role ${req.body.role} does not existed.`)

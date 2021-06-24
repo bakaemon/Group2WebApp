@@ -5,7 +5,6 @@ const bodyParser = lib.bodyParser;
 const configs = require("./configs");
 
 
-
 /* Middlewares */
 // express session initialization
 app.use(lib.session({

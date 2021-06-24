@@ -7,7 +7,7 @@ module.exports = (app) => {
     * @param {Function} getEvent 
     * @param {Function} postEvent 
     */
-    const eventhandler = (URL, getEvent, postEvent) => {
+    const eventhandler = (URL, getEvent, postEvent = undefined) => {
         if (postEvent !== undefined)
             app.post(URL, postEvent);
         app.get(URL, getEvent);

@@ -58,14 +58,19 @@ exports.getAddCategory = (req, res) => {
     })
 }
 exports.getAddUserToCourse = async (req, res) => {
-    var users = await User.find({});
-    var courses = await Course.find({});
-    res.render("admin/course/addUserToCourse", {
-        title: "Add user to course",
-        user_data: users,
-        course: courses,
-        user: req.session.User,
-    })
+    try {
+        var users = await User.find({});
+        var courses = await Course.find({});
+        res.render("admin/course/addUserToCourse", {
+            title: "Add user to course",
+            user_data: users,
+            course: courses,
+            user: req.session.User,
+        })
+    } catch (e) {
+        console.log(e);
+        res.end(500);
+    }
 }
 exports.getViewCourse = async (req, res) => {
     if (!req.query.id) res.redirect("back");
