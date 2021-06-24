@@ -99,9 +99,17 @@ exports.getViewCourse = async (req, res) => {
                 },
                 select: "-__v"
             })
-            // .skip((resPerPage * page) - resPerPage)
-            // .limit(resPerPage);
+        // .skip((resPerPage * page) - resPerPage)
+        // .limit(resPerPage);
         // for (var i = 1; i <= Math.ceil(numOfItems / resPerPage); i++) pages.push(i);
+        if (req.query.deluser) {
+            await Course.updateOne({ _id: req.query.id },
+                {
+                    $pull: { members: ObjectId(req.query.deluser) }
+                }, (err, result) => {
+                    res.redirect("back");
+                })
+        }
         res.render("admin/course/viewCourse", {
             title: "View ",
             course: course,
@@ -114,6 +122,7 @@ exports.getViewCourse = async (req, res) => {
     } catch (e) {
         console.log(e);
     }
+
 }
 //POST method
 exports.addCourse = async (req, res) => {
