@@ -1,4 +1,33 @@
 <script src="/assets/js/autocomplete.js"></script>
+<script>
+    function getUser(role, callback) {
+        if (typeof callback == "function")
+            $.ajax({
+                url: `http://localhost:3000/api?id=user&refby=${role}`,
+                type: 'GET',
+                dataType: "json",
+                success: callback
+            });
+    }
+    getUser("trainer", (users) => {
+        autocomplete_v2(document.getElementById("userauto-trainer"), users["data"], "username");
+    });
+    getUser("trainee", (users) => {
+        autocomplete_v2(document.getElementById("userauto-trainee"), users["data"], "username");
+    });
+    getUser("trainer", (users) => {
+        for (let i = 0; i < users.data.length; i++) {
+            var data = users["data"][i];
+            $("#trainer-group").append(`<option value="${data.username}">${data.username}</option>`);
+        }
+    });
+    getUser("trainee", (users) => {
+        for (let i = 0; i < users.data.length; i++) {
+            var data = users["data"][i];
+            $("#trainee-group").append(`<option value="${data.username}">${data.username}</option>`);
+        }
+    });
+</script>
 <div class="login-form">
     <form action="" method="post">
         <h2>Course Inviting</h2>
@@ -6,16 +35,22 @@
         <div class="form-group">
             <p><small style="color: red;">{{message}}</small></p>
         </div>
-        <div class="autocomplete">
-            <div class="form-group">
-                <input type="text" class="form-control" name="trainerusername" placeholder="Trainer's Username..." id="userauto-trainer"
-                >
+        <div class="form-group">
+            <select id="trainer-group" onchange="fillinput(event, 'userauto-trainer')">
+                <option disabled selected>--Choose user manually--</option>
+            </select>
+            <div class="autocomplete">
+                <input type="text" class="form-control" name="trainerusername" placeholder="Trainer's Username..."
+                    id="userauto-trainer">
             </div>
         </div>
-        <div class="autocomplete">
-            <div class="form-group">
-                <input type="text" class="form-control" name="traineeusername" placeholder="Trainee's Username..." id="userauto-trainee"
-                 >
+        <div class="form-group">
+            <select id="trainee-group" onchange="fillinput(event, 'userauto-trainee')">
+                <option disabled selected>--Choose user manually--</option>
+            </select>
+            <div class="autocomplete">
+                <input type="text" class="form-control" name="traineeusername" placeholder="Trainee's Username..."
+                    id="userauto-trainee">
             </div>
         </div>
         <div class="form-group">
@@ -32,21 +67,7 @@
     <div class="hint-text">Go back to <a href="/admin/course/">course control panel</a></div>
 </div>
 <script>
-    $.ajax({
-        url: 'http://localhost:3000/api?id=user&refby=trainer',
-        type: 'GET',
-        dataType: "json",
-        success: (users) => {
-            autocomplete_v2(document.getElementById("userauto-trainer"), users["data"], "username")
-        }
-    });
-        $.ajax({
-        url: 'http://localhost:3000/api?id=user&refby=trainee',
-        type: 'GET',
-        dataType: "json",
-        success: (users) => {
-            autocomplete_v2(document.getElementById("userauto-trainee"), users["data"], "username")
-        }
-    });
-
+    function fillinput(e, elementId) {
+        document.getElementById(elementId).value = e.target.value;
+    }
 </script>
