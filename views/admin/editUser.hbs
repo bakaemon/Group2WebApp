@@ -50,6 +50,7 @@
     </form>
     <div class="hint-text">Go back to <a href="/admin/users">user control panel</a></div>
 </div>
+<!-- Role id: {{user_data.role._id}} | Role name: {{user_data.role.name}}-->
 <script>
     $(document).ready(() => {
         $("select#role option[value={{{user_data.role._id}}}]").attr('selected', 'selected');
