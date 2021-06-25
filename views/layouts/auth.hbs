@@ -9,6 +9,7 @@
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/css/style.css" rel="stylesheet">
     <script src="http://cdn.ckeditor.com/4.6.1/standard/ckeditor.js"></script>
+      <script src="/assets/js/jquery/js"></script>
   </head>
   <body>
 
@@ -33,7 +34,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12">
-            <h1 class="text-center"> Admin Area <small>Account Login</small></h1>
+            <h1 class="text-center"> {{subtitle}}</small></h1>
           </div>
         </div>
       </div>
@@ -50,17 +51,21 @@
     </section>
 
     <footer id="footer">
-      <p>Copyright AdminStrap, &copy; 2017</p>
+      <p>Made by FPT DevTeam &copy; <i id="current-year"></i></p>
     </footer>
 
-  <script>
+  {{!-- <script>
      CKEDITOR.replace( 'editor1' );
- </script>
+ </script> --}}
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
+    <script>
+      var date = new Date();
+      document.getElementById("current-year").innerText = date.getFullYear();
+    </script>
   </body>
 </html>
