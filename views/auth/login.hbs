@@ -1,22 +1,18 @@
-<div class="login-form">
-    <form action="/auth/login" method="post">
-        <h2 class="text-center">Log in</h2>
-       <div class="form-group">
-            <p><small style="color: red;">{{message}}</small></p>
-        </div>
-        <div class="form-group">
-            <input type="text" class="form-control" placeholder="Username or email" required="required" name="login_value">
-        </div>
-        <div class="form-group">
-            <input type="password" class="form-control" placeholder="Password" required="required" name="password">
-        </div>
-        <div class="clearfix">
-            <label class="float-left form-check-label"><input type="checkbox" name="remember"> Remember me</label>
-            {{!-- <a href="#" class="float-right">Forgot Password?</a> --}}
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-block">Log in</button>
-        </div>
-    </form>
-    <p class="text-center"><a href="/auth/signup">Create an Account</a></p>
+{{#isdefined message}}
+<div class="card">
+    <div class="card-body">
+        <div class="alert alert-warning">{{message}}</div>
+    </div>
 </div>
+{{/isdefined}}
+<form id="login" action="" class="well" method="post">
+    <div class="form-group">
+        <label>Username or Email:</label>
+        <input type="text" class="form-control" name="login_value" placeholder="Enter Username or Email">
+    </div>
+    <div class="form-group">
+        <label>Password</label>
+        <input type="password" class="form-control" name="password" placeholder="Password">
+    </div>
+    <button type="submit" class="btn btn-default btn-block">Login</button>
+</form>

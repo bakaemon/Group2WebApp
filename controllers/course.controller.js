@@ -72,6 +72,46 @@ exports.getAddUserToCourse = async (req, res) => {
         res.end(500);
     }
 }
+exports.deleteCourse = async (req, res) => {
+    if (!req.query.id) return res.redirect("back");
+    try {
+        await Course.deleteOne({ _id: req.query.id }, (err, result) => {
+            if (err) {
+                res.write("<script>alert('Unable to delete.'); window.history.back(); </script>");
+                res.end();
+            } else res.redirect("back");
+        })
+    } catch (e) {
+        res.write("<script>alert('An error has orrcured'); window.history.back(); </script>");
+        res.end();
+    }
+}
+exports.getCategories = async (req, res) => {
+    try {
+        var data = await CourseCategory.find({});
+        res.render("admin/course/getCategories", {
+            title: "Category Control Panel",
+            category: data,
+            user: req.session.User
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}
+exports.deleteCategory = async (req, res) => {
+    if (!req.query.id) return res.redirect("back");
+    try {
+        await CourseCategory.deleteOne({ _id: req.query.id }, (err, result) => {
+            if (err) {
+                res.write("<script>alert('Unable to delete.'); window.history.back(); </script>");
+                res.end();
+            } else res.redirect("back");
+        })
+    } catch (e) {
+        res.write("<script>alert('An error has orrcured'); window.history.back(); </script>");
+        res.end();
+    }
+}
 exports.getViewCourse = async (req, res) => {
     if (!req.query.id) res.redirect("back");
     try {
@@ -123,6 +163,35 @@ exports.getViewCourse = async (req, res) => {
         console.log(e);
     }
 
+}
+exports.getEditCourse = async (req, res) => {
+    if (!req.query.id) return res.redirect("back");
+    try {
+        var course = await Course.findOne({ _id: req.query.id })
+            .populate({ path: "category", models: "CourseCategory" });
+        var category = await CourseCategory.find({});
+        res.render("admin/course/getEditCourse", {
+            title: "Edit course " + course.name,
+            course: course,
+            category: category,
+            user: req.session.User
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}
+exports.getEditCategory = async (req, res) => {
+    if (!req.query.id) return res.redirect("back");
+    try {
+        var category = await CourseCategory.findOne({ _id: req.query.id });
+        res.render("admin/course/getEditCategory", {
+            title: "Edit category " + category.name,
+            category: category,
+            user: req.session.User
+        });
+    } catch (e) {
+        console.log(e);
+    }
 }
 //POST method
 exports.addCourse = async (req, res) => {
@@ -190,11 +259,11 @@ exports.addUserToCourse = async (req, res) => {
         var course = req.body.course;
         if (!trainee && !trainer)
             return notice("You must input at least one of either trainer or trainee.");
+        //update members array
         const update = async (newmembers) => {
             await Course.updateOne({ name: course }, { $addToSet: { members: newmembers._id } }, (err, result) => {
                 if (err) return notice("Unable to add user to course");
                 if (result.nModified == 0) return notice("User '" + newmembers.username + "'  has already in course.");
-                console.log(result.nModified);
                 return notice("Added user '" + newmembers.username + "' to " + course);
             });
         };
@@ -208,8 +277,71 @@ exports.addUserToCourse = async (req, res) => {
             else notice("User did not exist.");
         }
     } catch (e) {
-        notice("An error hs occurred.");
+        notice("An error has occurred.");
         console.log(e);
     }
 
+}
+exports.editCourse = async (req, res) => {
+    if (!req.query.id) return res.redirect("back");
+    var course = await Course.findOne({ _id: req.query.id })
+        .populate({ path: "category", models: "CourseCategory" });
+    var category = await CourseCategory.find({});
+    var notice = (msg) => {
+        res.render("admin/course/getEditCourse", {
+            title: "Edit course " + course.name,
+            message: msg,
+            course: course,
+            category: category,
+            user: req.session.User
+        })
+    };
+    try {
+        let name = req.body.name;
+        let description = req.body.description;
+        let category = req.body.category;
+        var message
+        if (!name || !description || !category) return notice("Please enter either the input fields.");
+        await Course.updateOne({ _id: req.query.id }, {
+            name: name,
+            description: description,
+            category: ObjectId(category)
+        }, (err, result) => {
+            if (err) return notice("Unable to edit course.");
+            else if (result.nModified !== 0) message = "Course has been updated.";
+            else message = "Category has not been updated";
+            notice(message)
+        })
+
+    } catch (e) {
+        console.log(e);
+        notice("An error has orrcured.")
+    }
+}
+exports.editCategory = async (req, res) => {
+    if (!req.query.id) return res.redirect("back");
+    var category = await CourseCategory.findOne({ _id: req.query.id });
+    var notice = (msg) => {
+        res.render("admin/course/getEditCategory", {
+            title: "Edit category " + category.name,
+            message: msg,
+            category: category,
+            user: req.session.User
+        });
+    };
+    try {
+        let name = req.body.name;
+        let description = req.body.description;
+        if (!name || !description) return notice("Please enter either the input fields.");
+        await CourseCategory.updateOne({ _id: req.query.id }, {
+            name: name,
+            description: description
+        }, (err, result) => {
+            if (err) return notice("Unable to edit category.");
+            else if (result.nModified !== 0) return notice("Category has been updated.");
+            else notice("Category has not been updated")
+        });
+    } catch (e) {
+        notice("An error has orrcured.")
+    }
 }

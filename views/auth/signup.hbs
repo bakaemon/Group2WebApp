@@ -1,52 +1,44 @@
-<div class="login-form">
-    <form action="/auth/signup" method="post">
-        <h2>Sign Up</h2>
-        <p>Please fill in this form to create an account!</p>
-        <hr>
-        <div class="form-group">
-            <p><small style="color: red;">{{message}}</small></p>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col"><input type="text" class="form-control" name="first_name" placeholder="First Name"
-                        required="required"></div>
-                <div class="col"><input type="text" class="form-control" name="last_name" placeholder="Last Name"
-                        required="required"></div>
-            </div>
-        </div>
-        <div class="form-group">
-            <input type="text" class="form-control" name="username" placeholder="Username" required="required">
-        </div>
-        <div class="form-group">
-            <input type="email" class="form-control" name="email" placeholder="Email" required="required">
-        </div>
-        <div class="form-group">
-            <input type="password" class="form-control" name="password" placeholder="Password" required="required">
-        </div>
-        <div class="form-group">
-            <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password"
-                required="required">
-        </div>
-        <!--        <div class="form-group">-->
-        <!--            <input type="hidden" class="form-control" name="role" value="traine">-->
-        <!--        </div>-->
-        <br>
-        <div class="form-group">
-            <small>Date of Birth</small><br>
-            <input type="date" name="dob" class="form-control" placeholder="Date of Birth">
-        </div>
-        <div class="form-group">
-            <input type="text" name="education" placeholder="Education" class="form-control">
-        </div>
-        <div class="form-group">
-            <input type="text" name="lang" placeholder="Programming language" class="form-control">
-        </div>
-        <div class="form-group">
-            <input type="number" name="score" placeholder="TOEIC score" class="form-control">
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-lg">Sign Up</button>
-        </div>
-    </form>
-    <div class="hint-text">Already have an account? <a href="/auth/login">Login here</a></div>
-</div>
+<form action="/auth/signup" method="post" class="well">
+    <div class="form-group">
+        <p><small style="color: red;">{{message}}</small></p>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" name="first_name" placeholder="First Name" required="required">
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" name="last_name" placeholder="Last Name" required="required">
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" name="username" placeholder="Username" required="required">
+    </div>
+    <div class="form-group">
+        <input type="email" class="form-control" name="email" placeholder="Email" required="required">
+    </div>
+    <div class="form-group">
+        <input type="password" class="form-control" name="password" placeholder="Password" required="required">
+    </div>
+    <div class="form-group">
+        <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password"
+            required="required">
+    </div>
+    <!--        <div class="form-group">-->
+    <!--            <input type="hidden" class="form-control" name="role" value="traine">-->
+    <!--        </div>-->
+    <br>
+    <div class="form-group">
+        <input type="date" name="dob" class="form-control" placeholder="Date of Birth">
+    </div>
+    <div class="form-group">
+        <input type="text" name="education" placeholder="Education" class="form-control">
+    </div>
+    <div class="form-group">
+        <input type="text" name="lang" placeholder="Programming language" class="form-control">
+    </div>
+    <div class="form-group">
+        <input type="number" name="score" placeholder="TOEIC score" class="form-control">
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-default btn-block">Sign Up</button>
+    </div>
+</form>
+<div class="hint-text">Already have an account? <a href="/auth/login">Login here</a></div>

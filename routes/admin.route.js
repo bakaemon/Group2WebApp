@@ -3,9 +3,9 @@ const adminController = require("../controllers").admin
 module.exports = (app) => {
   app.use((req, res, next) => {
     const userSession = req.session.User;
-    if (!userSession || userSession.role !== "admin") {
-      res.redirect("/")
-    } else return next();
+    if (!userSession || ["admin", "staff"].includes(userSession) ) {
+      res.redirect("/auth/login")
+    } else next();
   });
   /**
 * Allow to establish both GET and POST event with the same URL request

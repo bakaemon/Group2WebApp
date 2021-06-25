@@ -39,8 +39,8 @@ module.exports = () => {
         }[operator];
     });
     //added isdefined structure that check if the variable is empty or not, return true or false boolean
-    hbs.registerHelper('isdefined', function (value) {
-        return value !== undefined;
+    hbs.registerHelper('isdefined', function (value, options) {
+        return (value !== undefined) ? options.fn(this) : options.inverse(this);
     });
     //register hbs partial
     hbs.registerPartials('views/partials');

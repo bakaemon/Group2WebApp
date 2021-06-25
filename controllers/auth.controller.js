@@ -11,7 +11,8 @@ exports.signup = async (req, res) => {
       title: "Sign up",
       course: courses,
       message: msg,
-      user: req.session.User
+      user: req.session.User,
+      layout: "layouts/auth"
     });
   };
   try {
@@ -53,11 +54,12 @@ exports.signup = async (req, res) => {
 }
 
 exports.login = async (req, res) => {
-  if (req.session.User) return redirect("/");
+  if (req.session.User) return res.redirect("/");
   var notice = (msg) => {
     res.render("auth/login", {
       title: "Login",
-      message: msg
+      message: msg,
+      layout: "layouts/auth"
     });
   }
   try {
@@ -97,9 +99,9 @@ exports.logout = (req, res) => {
   res.redirect("/auth/login");
 }
 exports.getSignup = (req, res) => {
-  res.render("auth/signup", { title: "Sign up", user: req.session.User });
+  res.render("auth/signup", { title: "Sign up", user: req.session.User, layout: "layouts/auth" });
 }
 
 exports.getLogin = (req, res) => {
-  res.render("auth/login", { title: "Login", user: req.session.User });
+  res.render("auth/login", { title: "Login", user: req.session.User, layout: "layouts/auth" });
 }
