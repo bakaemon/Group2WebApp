@@ -11,13 +11,13 @@ app.use(lib.session({
   resave: true,
   saveUninitialized: true,
   secret: 'extremelysecret',
-  cookie: { maxAge: 600000 }
+  cookie: {maxAge: 600000}
 }));
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
-app.set('view options', { layout: '/layouts/main' });
+app.use(bodyParser.urlencoded({extended: true}));
+app.set('view options', {layout: '/layouts/main'});
 app.set("view engine", "hbs");
 app.use(lib.express.static(lib.path.join(__dirname, '/public')));
 //register hbs functionalities
@@ -39,7 +39,7 @@ mongoose.connect(uri, {
 configs.routes.load(app);
 /* 404 handling */
 app.use((req, res, next) => {
-  res.render("404", { title: "Not found!", user: req.session.User });
+  res.render("404", {title: "Not found!", user: req.session.User});
 });
 
 var port = process.env.PORT || 3000; //use port 3000 unless there are preconfigured ports

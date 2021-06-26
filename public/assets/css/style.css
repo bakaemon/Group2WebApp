@@ -1,5 +1,8 @@
 body{
   background:#f4f4f4;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Navbar */
@@ -114,11 +117,18 @@ body{
 
 /* Footer */
 #footer{
-  background:#333333;
-  color:#ffffff;
-  text-align:center;
-  padding:30px;
-  margin-top:30px;
+  /*position: fixed;*/
+  background: #333333;
+  color: #ffffff;
+  text-align: center;
+  padding: 30px;
+  margin-top: 30px;
+  bottom: 0;
+  width: 100%;
+}
+
+.body-container{
+  flex: 1;
 }
 
 

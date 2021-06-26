@@ -5,7 +5,11 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="show-entries">
-                            <a href="/admin/course/addcategory" class="btn success"><i class="material-icons">&#xE147;</i></a>
+                            <button class="btn btn-default dropdown-toggle"
+                                    type="button"
+                                    onclick="window.location.href='/admin/course/addcategory'">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
                         </div>
                     </div>
                     <div class="col-sm-4">
@@ -24,12 +28,12 @@
                     </div>
                 </div>
             </div>
-            <table class="table table-bordered">
+            <table class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th>Name <i class="fa fa-sort"></i></th>
                         <th>Description</th>
-                        <th>Actions</th>
+                        <th style="width: 12%">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,10 +42,12 @@
                         <td>{{name}}</td>
                         <td>{{description}}</td>
                         <td>
-                            <a href="/admin/course/edit_category?id={{_id}}" class="edit" title="Edit" data-toggle="tooltip"><i
-                                    class="material-icons">&#xE254;</i></a>
-                            <a href="javascript:deleteitem('{{_id}}')" class="delete" title="Delete"
-                                data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                            <div style="display: flex; justify-content: space-around; width: 60%">
+                                <a href="/admin/course/edit_category?id={{_id}}" class="edit" title="Edit" data-toggle="tooltip"><i
+                                    class="glyphicon glyphicon-pencil"></i></a>
+                                <a href="javascript:deleteitem('{{_id}}')" class="delete" title="Delete"
+                                   data-toggle="tooltip"><i class="glyphicon glyphicon-trash"></i></a>
+                            </div>
                         </td>
                     </tr>
                     {{/each}}
