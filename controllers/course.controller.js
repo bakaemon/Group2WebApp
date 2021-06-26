@@ -210,10 +210,14 @@ exports.addCourse = async (req, res) => {
             user: req.session.User
         });
     }
-    await Course.create(template, (err) => {
-        if (err) return notice("Unable to add course to database.");
-        notice("Course added.");
+    await Course.findOne({name: req.body.name, description: req.body.description},async (err, result)=>{
+        if(result) return notice("Duplicate coures!")
+        await Course.create(template, (err) => {
+            if (err) return notice("Unable to add course to database.");
+            notice("Course added.");
+        })
     })
+    
 }
 exports.addCategory = async (req, res) => {
     var notice = (msg) => {
