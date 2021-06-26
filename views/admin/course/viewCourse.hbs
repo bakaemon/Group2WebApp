@@ -5,14 +5,16 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="show-entries dropdown show">
-                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="material-icons">&#xE147;</i>
-                            </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="/admin/course/addcourse">Add course</a>
-                                <a class="dropdown-item" href="/admin/course/addcategory">Add category</a>
-                                <a class="dropdown-item" href="/admin/course/assign">Assign user to course</a>
+                            <div class="dropdown create">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li><a class="dropdown-item" href="/admin/course/addcourse">Add course</a></li>
+                                    <li><a class="dropdown-item" href="/admin/course/category">Manage category</a></li>
+                                    <li><a class="dropdown-item" href="/admin/course/assign">Assign user to course</a></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -31,13 +33,13 @@
                     </div> --}}
                 </div>
             </div>
-            <table class="table table-bordered">
+            <table class="table table-striped table-hovered">
                 <thead>
                     <tr>
                         <th>Username <i class="fa fa-sort"></i></th>
                         <th>Fullname</th>
                         <th>Role</th>
-                        <th>Actions</th>
+                        <th style="width: 15%">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,10 +49,12 @@
                         <td>{{fullName}}</td>
                         <td>{{role.name}}</td>
                         <td>
-                            <a href="/admin/course/view?id={{_id}}" class="view" title="View" data-toggle="tooltip"><i
-                                    class="material-icons">&#xE417;</i></a>
-                            <a href="javascript:deleteitem('{{_id}}')" class="delete" title="Delete"
-                                data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                            <div style="display: flex; justify-content: space-around; width: 50%">
+                                <a href="/admin/course/view?id={{_id}}" class="view" title="View" data-toggle="tooltip"><i
+                                    class="glyphicon glyphicon-eye-open"></i></a>
+                                <a href="javascript:deleteitem('{{_id}}')" class="delete" title="Delete"
+                                   data-toggle="tooltip"><i class="glyphicon glyphicon-trash"></i></a>
+                            </div>
                         </td>
                     </tr>
                     {{/each}}
