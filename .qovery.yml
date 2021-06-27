@@ -1,0 +1,14 @@
+---
+application:
+  name: "group2webapp"
+  project: "MultiCMS"
+  organization: "QoveryCommunity"
+databases:
+- type: "MONGODB"
+  name: "cms"
+routers:
+- name: "main-group2webapp"
+  routes:
+  - application_name: "group2webapp"
+    paths:
+    - "/*"
