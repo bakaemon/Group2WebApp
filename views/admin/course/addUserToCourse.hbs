@@ -3,7 +3,7 @@
     function getUser(role, callback) {
         if (typeof callback == "function")
             $.ajax({
-                url: `/api?id=user&refby=${role}`,
+                url: `/api/user?id=user&refby=${role}`,
                 type: 'GET',
                 dataType: "json",
                 success: callback

@@ -5,7 +5,7 @@ const Course = models.course;
 const CC = models.courseCategory;
 const { ObjectId } = require("../libraries").mongoose.Types;
 
-exports.getapi = async (req, res) => {
+exports.getUserApi = async (req, res) => {
   switch (req.query.id) {
     case "user":
       var data;
@@ -26,4 +26,7 @@ exports.getapi = async (req, res) => {
       res.end(JSON.stringify({ data: await CC.find({}).select("-__v") }));
       break;
   }
+}
+exports.getFakeInfo = async (req, res) => {
+  
 }

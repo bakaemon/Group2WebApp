@@ -1,9 +1,13 @@
-const User = require("../models").user
+const User = require("../models").user;
+const Role = require("../models").role;
 const Course = require("../models").course
 const CC = require("../models").courseCategory
 exports.home = async (req, res) => {
     let numsOfUsers = await User.countDocuments();
-    let users = await User.find({}).limit(5);
+    let trainee_id = (await Role.findOne({ name: "trainee" }, "_id"))._id;
+    let users = await User.find({ role: trainee_id })
+    .sort({ "bio.Score": -1})
+    .limit(5);
     let numsOfCourse = await Course.countDocuments();
     let numsOfCategory = await CC.countDocuments();
     res.render("index", {
@@ -16,5 +20,5 @@ exports.home = async (req, res) => {
     });
 }
 exports.notfound = (req, res) => {
-    res.render("404", { title: "Not found!" });
+    res.render("404", { title: "Not found!", user: req.session.User, layout: "layouts/auth" });
 }

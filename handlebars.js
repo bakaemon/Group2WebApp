@@ -44,4 +44,8 @@ module.exports = () => {
     });
     //register hbs partial
     hbs.registerPartials('views/partials');
+    //set encapsulated root variable
+    hbs.registerHelper("set", (v1, v2, options) => {
+        options.data.root[v1] = v2;
+    })
 }

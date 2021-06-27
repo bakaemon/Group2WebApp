@@ -8,6 +8,7 @@ module.exports = {
     fs: require("fs"),
     hbs: require("hbs"),
     // handlebars: require("express-handlebars"),
-    bcrypt: require("bcryptjs")
+    bcrypt: require("bcryptjs"),
+    faker: require("faker")
     //upon adding new libraries, create their aliases here
 }
