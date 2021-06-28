@@ -88,7 +88,7 @@
         data.total = 0;
       } else if (confirm("Edit value?")) {
         data.active = true;
-        data.total = prompt("Enter new value: ") || 0;
+        data.total = parseInt(prompt("Enter new value: ")) || 0;
       }
       $.ajax({
         url: "/admin/users/award",
