@@ -11,6 +11,10 @@
   <link href="/assets/css/autocomplete.css" rel="stylesheet">
   <link href="/assets/css/style.css" rel="stylesheet">
   <script src="/assets/js/jquery.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+  <link rel="manifest" crossorigin="use-credentials" href="/assets/favicon/manifest.json">
   {{!--
   <script src="http://cdn.ckeditor.com/4.6.1/standard/ckeditor.js"></script> --}}
 
@@ -170,15 +174,6 @@
   <script>
     var date = new Date();
     document.getElementById("current-year").innerText = date.getFullYear();
-  </script>
-  <script>
-    function getViews() {
-      $.ajax({
-        url: "/api/getViews",
-        method: "get",
-      });
-    }
-    getViews()
   </script>
   <script>
     function showView() {

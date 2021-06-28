@@ -7,22 +7,27 @@
         </div>
         <div class="form-group">
             <label for="fullName">Full Name</label>
-            <input id="fullName" type="text" class="form-control" name="fullName" placeholder="Fullname" required value={{holder.fullName}}>
+            <input id="fullName" type="text" class="form-control" name="fullName" placeholder="Fullname" required
+                value={{holder.fullName}}>
         </div>
         <div class="form-group">
             <label for="username">Username</label>
-            <input id="username" type="text" class="form-control" name="username" placeholder="Username" required value={{holder.username}}>
+            <input id="username" type="text" class="form-control" name="username" placeholder="Username" required
+                value={{holder.username}}>
         </div>
         <div class="form-group">
             <label for="email">Email</label>
-            <input id="email" type="email" class="form-control" name="email" placeholder="Email" required value={{holder.email}}>
+            <input id="email" type="email" class="form-control" name="email" placeholder="Email" required
+                value={{holder.email}}>
         </div>
         <div class="form-group">
             <label for="password">Password</label>
-            <input id="password" type="text" class="form-control" name="password" placeholder="Password" required value={{holder.password}}>
+            <input id="password" type="text" class="form-control" name="password" placeholder="Password" required
+                value={{holder.password}}>
         </div>
         <div class="form-group">
-            <select name="role" class="form-control">
+            <label for="role">Role</label>
+            <select id="role" name="role" class="form-control">
                 {{#each role}}
                 <option value="{{name}}">{{name}}</option>
                 {{/each}}
@@ -30,20 +35,23 @@
         </div>
         <div class="form-group">
             <label for="dob">Date of birth</label>
-            <input id="dob" type="date" name="dob" class="form-control" placeholder="Date of Birth" value={{holder.dob}}>
+            <input id="dob" type="date" name="dob" class="form-control" placeholder="Date of Birth"
+                value={{holder.dob}}>
         </div>
         <div class="form-group">
             <label for="education">Education</label>
-            <input id="education" type="text" name="education" placeholder="Education" class="form-control" value={{holder.education}}>
+            <input id="education" type="text" name="education" placeholder="Education" class="form-control"
+                value={{holder.education}}>
         </div>
         <div class="form-group">
-            <label for="programming-language">Programming language</label>
-            <input id="programming-language" type="text" name="lang" placeholder="Programming language" class="form-control" value={{holder.lang}}>
+            <label for="lang">Programming language</label>
+            <input id="lang" type="text" name="lang" placeholder="Programming language" class="form-control"
+                value={{holder.lang}}>
         </div>
         <div class="form-group">
             <label for="score">TOEIC Score</label>
-            <input id="score" type="number" name="score" placeholder="TOEIC score" class="form-control" value={{holder.score}}>
-            <input type="number" name="score" id="score" placeholder="TOEIC score" class="form-control">
+            <input id="score" type="number" name="score" placeholder="TOEIC score" class="form-control"
+                value={{holder.score}}>
         </div>
         <div class="form-group">
             <div class="row">
@@ -54,8 +62,50 @@
                     <button type="button" id="generator" class="btn btn-primary btn-lg">Generate user</button>
                 </div>
             </div>
-
         </div>
     </form>
     <div class="hint-text">Go back to <a href="/admin/users">user control panel</a></div>
 </div>
+<script>
+    const randomChoice = (array) => {
+        const random = Math.floor(Math.random() * array.length);
+        return array[random];
+    }
+    const randomString = (length) => {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() *
+                charactersLength));
+        }
+        return result;
+    }
+    $("#generator").click(() => {
+        $.ajax({
+            url: "/api/fakeuser?k=contextualCard",
+            method: "get",
+            success: (res) => {
+                var name = res.name;
+                var username = res.username;
+                var email = res.email;
+                var dob = res.dob.split("T")[0];
+                var langs = ["C++", "C", "Java", "JavaScript", "Python", "Rust", "Perl", "Ruby", "PHP"];
+                var lang = randomChoice(langs);
+                var education = "University Graduated";
+                var score = Math.floor(Math.random() * 10);
+                var role = randomChoice(["trainer", "trainee"]);
+                var password = randomString(9)
+                $("#fullName").val(name);
+                $("#username").val(username);
+                $("#email").val(email);
+                $("#dob").val(dob);
+                $("#education").val(education);
+                $("#lang").val(lang)
+                $("#score").val(score);
+                $("#role").val(role);
+                $("#password").val(password);
+            }
+        })
+    });
+</script>

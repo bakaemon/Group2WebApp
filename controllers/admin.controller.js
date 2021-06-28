@@ -20,7 +20,7 @@ exports.addUser = async (req, res) => {
   try {
     const username = req.body.username;
     const email = req.body.email;
-    const fullName = req.body.fullname;
+    const fullName = req.body.fullName;
     const password = req.body.password;
     const dob = req.body.dob;
     const education = req.body.education;
@@ -47,6 +47,7 @@ exports.addUser = async (req, res) => {
     }
 
     if (!validate("username", username)) {
+      console.log(validate("username", username));
       return notice("Username must not contain special key.", holder);
     }
 
@@ -71,6 +72,10 @@ exports.addUser = async (req, res) => {
         Score: score
       },
       role: check._id,
+      scholarship: {
+        active: false,
+        total: 0
+      }
 
     };
     await User.create(user, (err) => {

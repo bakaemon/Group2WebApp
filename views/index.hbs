@@ -128,3 +128,12 @@
     }
   }
 </script>
+<script>
+  function getViews() {
+    $.ajax({
+      url: "/api/getViews",
+      method: "get",
+    });
+  }
+  getViews();
+</script>

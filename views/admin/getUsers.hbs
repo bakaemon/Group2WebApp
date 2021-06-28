@@ -5,9 +5,8 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="show-entries">
-                            <button class="btn btn-default dropdown-toggle"
-                                    type="button"
-                                    onclick="window.location.href='/admin/add'">
+                            <button class="btn btn-default dropdown-toggle" type="button"
+                                onclick="window.location.href='/admin/add'">
                                 <span class="glyphicon glyphicon-plus"></span>
                             </button>
                         </div>
@@ -16,12 +15,12 @@
                         <h2 class="text-center">Users' <b>Details</b></h2>
                     </div>
                     <div class="col-sm-4">
-                        <form action="" method="GET">
+                        <form action="" method="GET" id="searchform" autocomplete="off">
                             <div class="search-box">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
-                                    <input type="text" class="form-control" placeholder="Search&hellip;"
-                                           name="search_query">
+                                    <span class="input-group-addon" id="submit"><i class="glyphicon glyphicon-search"></i></span>
+                                    <input type="text" id="search" class="form-control" placeholder="Search&hellip;"
+                                        name="search_query" autocomplete="off">
                                 </div>
                             </div>
                         </form>
@@ -30,15 +29,15 @@
             </div>
             <table class="table table-striped table-hover">
                 <thead>
-                <tr>
-                    <th>Username <i class="fa fa-sort"></i></th>
-                    <th>Fullname</th>
-                    <th>Email <i class="fa fa-sort"></i></th>
-                    <th>Actions</th>
-                </tr>
+                    <tr>
+                        <th>Username <i class="fa fa-sort"></i></th>
+                        <th>Fullname</th>
+                        <th>Email <i class="fa fa-sort"></i></th>
+                        <th>Actions</th>
+                    </tr>
                 </thead>
                 <tbody>
-                {{#each users_data}}
+                    {{#each users_data}}
                     <tr>
                         <td>{{username}}</td>
                         <td>{{fullName}}</td>
@@ -46,30 +45,29 @@
                         <td>
                             <div style="display: flex; justify-content: space-around; width: 70%">
                                 <a href="/admin/view?id={{_id}}" class="view" title="View" data-toggle="tooltip"><i
-                                    class="glyphicon glyphicon-eye-open"></i></a>
+                                        class="glyphicon glyphicon-eye-open"></i></a>
                                 <a href="/admin/edit?id={{_id}}" class="edit" title="Edit" data-toggle="tooltip"><i
-                                    class="glyphicon glyphicon-pencil"></i></a>
+                                        class="glyphicon glyphicon-pencil"></i></a>
                                 <a href="javascript:deleteitem('{{_id}}')" class="delete" title="Delete"
-                                   data-toggle="tooltip"><i class="glyphicon glyphicon-trash"></i></a>
+                                    data-toggle="tooltip"><i class="glyphicon glyphicon-trash"></i></a>
                             </div>
                         </td>
                     </tr>
-                {{/each}}
+                    {{/each}}
                 </tbody>
             </table>
             <div class="clearfix">
                 <div class="hint-text">Found <b>{{numOfUsers}}</b> entries</div>
                 <ul class="pagination">
                     {{#ifCond page ">" 1}}
-                        <li class="page-item"><a href="?page={{math page '-' 1}}">Previous</a></li>
+                    <li class="page-item"><a href="?page={{math page '-' 1}}">Previous</a></li>
                     {{/ifCond}}
                     {{#each pages}}
-                        <li class="page-item"><a href="?page={{this}}" class="page-link">{{this}}</a></li>
+                    <li class="page-item"><a href="?page={{this}}" class="page-link">{{this}}</a></li>
                     {{/each}}
-                    {{#ifCond page "<" pagelength}}
-                        <li class="page-item"><a href="?page={{math page '+' 1}}"
+                    {{#ifCond page "<" pagelength}} <li class="page-item"><a href="?page={{math page '+' 1}}"
                             class="pager-link">Next</a></li>
-                    {{/ifCond}}
+                        {{/ifCond}}
                 </ul>
             </div>
         </div>
@@ -84,11 +82,30 @@
         var allow = confirm("Are you sure to delete?");
         if (allow) window.location.href = "/admin/delete?id=" + id;
     }
+    function getUser(role, callback) {
+        if (typeof callback == "function")
+            $.ajax({
+                url: `/api/user?id=user&refby=${role}`,
+                type: 'GET',
+                dataType: "json",
+                success: callback
+            });
+    }
 </script>
 <script>
     $(document).ready(() => {
         $("li.page-item").each(() => {
             if ($(this).find("a.page-link").text() == "{{{page}}}") $(this).addClass("page-item active").removeClass("page-item");
+        });
+        getUser("", (users) => {
+            autocomplete_v2(document.getElementById("search"), users["data"], "username");
+        });
+        $("#submit").click(()=> {
+            $("#searchform").submit()
+        });
+        $("#search").keydown((e) => {
+            if (e.keyCode == 13) $("#searchform").submit()
         })
     })
 </script>
+<script src="/assets/js/autocomplete.js"></script>
