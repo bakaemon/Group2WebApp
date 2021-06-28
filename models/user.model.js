@@ -15,6 +15,10 @@ const UserSchema = new mongoose.Schema({
   role: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Role"
+  },
+  scholarship: {
+    active: Boolean,
+    total: Number
   }
 });
 

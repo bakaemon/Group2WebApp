@@ -24,6 +24,10 @@ module.exports = () => {
                 return (v1 && v2) ? options.fn(this) : options.inverse(this);
             case '||':
                 return (v1 || v2) ? options.fn(this) : options.inverse(this);
+            case "of":
+                return v1.some(r => v2.includes(r)) ? options.fn(this) : options.inverse(this);
+            case "in":
+                return (v2.includes(v1)) ? options.fn(this) : options.inverse(this);
         }
     });
     hbs.registerHelper("math", function (v1, operator, v2, options) {

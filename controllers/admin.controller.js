@@ -85,7 +85,25 @@ exports.editUser = async (req, res) => {
     res.render("admin/editUser", { title: "Edit user", message: message, user_data: user, role: roles, user: req.session.User });
   })
 }
-
+exports.giveScholarship = async (req, res) => {
+  var respond = (message, data = {}, isError = true,) => {
+    res.json({ status: isError, message: message, data: data })
+  }
+  var user = await User.findOne({ _id: req.body.id });
+  if (!user) return respond("No user found.");
+  var users = await User.find().sort({ "bio.Score": -1 });
+  if (-1 > users.indexOf(user) > 2) return respond("User didn't meet criteria to get scholarship");
+  await User.updateOne(user, {
+    scholarship: {
+      active: req.body.active,
+      total: req.body.total
+    }
+  }, { multi: true }).then((result, err) => {
+    if (result.nModified !== 0)
+      return respond("Set " + user.username + "'s scholarship to active, total value of $" + req.body.total, result, false);
+    respond("The trainee " + user.name + " already had scholarship!");
+  }).catch(e => { respond(e); console.log(e) });
+}
 /* GET methods */
 exports.getUsers = async (req, res) => {
   const page = req.query.page || 1; // Page 

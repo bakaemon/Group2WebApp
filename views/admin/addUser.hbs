@@ -18,7 +18,7 @@
             <input type="text" class="form-control" name="password" id="password" placeholder="Password" required>
         </div>
         <div class="form-group">
-            <select name="role" class="form-control">
+            <select name="role" id="role" class="form-control">
                 {{#each role}}
                 <option value="{{name}}">{{name}}</option>
                 {{/each}}
@@ -66,31 +66,36 @@
         }
         return result;
     }
-$("#generator").click(() => {
-            $.ajax({
-                url: "/api/fakeuser?k=contextualCard",
-                method: "get",
-                success: (res) => {
-                    var name = res.name;
-                    var username = res.username;
-                    var email = res.email;
-                    var dob = res.dob.split("T")[0];
-                    var langs = ["C++", "C", "Java", "JavaScript", "Python", "Rust", "Perl", "Ruby", "PHP"];
-                    var lang = randomChoice(langs);
-                    var education = "University Graduated";
-                    var score = Math.floor(Math.random() * 10);
-                    var role = randomChoice(["admin", "staff", "trainer", "trainee"]);
-                    var password = randomString(6)
-                    $("#fullname").val(name);
-                    $("#username").val(username);
-                    $("#email").val(email);
-                    $("#dob").val(dob);
-                    $("#education").val(education);
-                    $("#lang").val(lang)
-                    $("#score").val(score);
-                    $("#role").val(role);
-                    $("#password").val(password);
-                }
-            })
-        });
+    const getRandomInt = (min, max) => {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    $("#generator").click(() => {
+        $.ajax({
+            url: "/api/fakeuser?k=contextualCard",
+            method: "get",
+            success: (res) => {
+                var name = res.name;
+                var username = res.username;
+                var email = res.email;
+                var dob = res.dob.split("T")[0];
+                var langs = ["C++", "C", "Java", "JavaScript", "Python", "Rust", "Perl", "Ruby", "PHP"];
+                var lang = randomChoice(langs);
+                var education = "University Graduated";
+                var score = getRandomInt(1, 9)
+                var role = randomChoice(["admin", "staff", "trainer", "trainee"]);
+                var password = randomString(6)
+                $("#fullname").val(name);
+                $("#username").val(username);
+                $("#email").val(email);
+                $("#dob").val(dob);
+                $("#education").val(education);
+                $("#lang").val(lang)
+                $("#score").val(score);
+                $("#role").val(role).change();
+                $("#password").val(password);
+            }
+        })
+    });
 </script>

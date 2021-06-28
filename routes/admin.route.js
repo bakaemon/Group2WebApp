@@ -24,5 +24,6 @@ module.exports = (app) => {
   eventhandler("/admin/users", adminController.getUsers);
   eventhandler("/admin/edit", adminController.getEditUser, adminController.editUser);
   eventhandler("/admin/delete", adminController.deleteUser);
+  app.post("/admin/users/award", adminController.giveScholarship)
 }
 
