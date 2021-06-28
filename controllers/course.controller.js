@@ -2,6 +2,7 @@ const models = require("../models")
 const Course = models.course;
 const User = models.user
 const CourseCategory = models.courseCategory;
+const validate = require("../tools").validateInput;
 const { ObjectId } = require("../libraries").mongoose.Types;
 //GET methods
 exports.getCourses = async (req, res) => {
@@ -202,35 +203,44 @@ exports.addCourse = async (req, res) => {
         category: ObjectId(req.body.category),
         members: []
     };
-    var notice = (msg) => {
+    var notice = (msg, holder) => {
         res.render("admin/course/addCourse", {
             title: "Add course",
             category: category,
             message: msg,
+            holder: holder,
             user: req.session.User
         });
     }
+
+    if(!validate("unicode", template.name)) {
+        return notice("Invalid course name", template)
+    }
+
     await Course.create(template, (err) => {
-        if (err) return notice("Unable to add course to database.");
+        if (err) return notice("Unable to add course to database.", template);
         notice("Course added.");
     })
 }
 exports.addCategory = async (req, res) => {
-    var notice = (msg) => {
+    var notice = (msg, holder) => {
         res.render("admin/course/addCategory", {
             title: "Add Course Category",
             message: msg,
+            holder: holder,
             user: req.session.User
         });
     }
     try {
-        if (!req.body.name || !req.body.description) return notice("Must enter either name or description")
         const template = {
             name: req.body.name,
             description: req.body.description
         };
-        var findCat = await CourseCategory.find(template)
-        if (findCat.length > 0) return notice("The category has already existed");
+        if (!req.body.name || !req.body.description) return notice("Must enter either name or description", template);
+        if (!validate("unicode", req.body.name)) return notice("Invalid category name", template);
+
+        var findCate = await CourseCategory.find(template);
+        if (findCate.length > 0) return notice("The category has already existed");
         await CourseCategory.create(template, (err, result) => {
             if (err) return notice("Unable to add course category to database");
             notice("Category added.");
@@ -300,8 +310,9 @@ exports.editCourse = async (req, res) => {
         let name = req.body.name;
         let description = req.body.description;
         let category = req.body.category;
-        var message
+        let message
         if (!name || !description || !category) return notice("Please enter either the input fields.");
+        if (!validate("unicode", name)) return notice("Invalid course name.");
         await Course.updateOne({ _id: req.query.id }, {
             name: name,
             description: description,

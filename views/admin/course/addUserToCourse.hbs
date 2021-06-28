@@ -35,6 +35,7 @@
         <div class="form-group">
             <p><small style="color: red;">{{message}}</small></p>
         </div>
+        <label>Trainer</label>
         <div class="form-group">
             <select id="trainer-group" onchange="fillinput(event, 'userauto-trainer')" class="form-control">
                 <option disabled selected>--Choose user manually--</option>
@@ -44,6 +45,7 @@
                     id="userauto-trainer">
             </div>
         </div>
+        <label>Trainee</label>
         <div class="form-group">
             <select id="trainee-group" onchange="fillinput(event, 'userauto-trainee')" class="form-control">
                 <option disabled selected>--Choose user manually--</option>
@@ -53,6 +55,7 @@
                     id="userauto-trainee">
             </div>
         </div>
+        <label>Course</label>
         <div class="form-group">
             <select name="course" class="form-control">
                 {{#each course}}

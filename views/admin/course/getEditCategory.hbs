@@ -1,14 +1,16 @@
 <div class="login-form">
     <form action="" method="post">
-        <h2>User Management</h2>
+        <h2>Edit Category</h2>
         <hr>
         <div class="form-group">
             <p><small style="color: red;">{{message}}</small></p>
         </div>
+        <label>Category name</label>
         <div class="form-group">
             <input type="text" class="form-control" name="name" placeholder="category's name... "
                 value="{{category.name}}" required>
         </div>
+        <label>Description</label>
         <div class="form-group">
             <textarea class="form-control" name="description" placeholder="Description" required>{{category.description}}</textarea>
         </div>

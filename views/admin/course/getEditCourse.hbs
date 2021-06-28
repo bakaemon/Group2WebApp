@@ -5,13 +5,16 @@
         <div class="form-group">
             <p><small style="color: red;">{{message}}</small></p>
         </div>
+        <label>Course name</label>
         <div class="form-group">
             <input type="text" class="form-control" name="name" placeholder="Course's name... "
                 value="{{course.name}}" required>
         </div>
+        <label>Description</label>
         <div class="form-group">
             <textarea class="form-control" name="description" placeholder="Email"required>{{course.description}}</textarea>
         </div>
+        <label>Category</label>
         <div class="form-group">
             <select name="category" class="form-control" id="role">
                 {{#each category}}

@@ -1,5 +1,5 @@
 /**
- * This file í to import all js file inside this folder
+ * This file is to import all js file inside this folder
  */
 let fs = require("../libraries").fs;
 
