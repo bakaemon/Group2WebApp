@@ -83,7 +83,7 @@ exports.login = async (req, res) => {
     };
     if (req.body.remember) req.session.cookie.maxAge = 365 * 24 * 60 * 60 * 1000; //expires after a year
     else req.session.cookie.expires = false; //expire after closing browser
-    var urldecoded = new Buffer(req.query.ref, 'base64')
+    var urldecoded = new Buffer(req.query.ref || "", 'base64')
     res.redirect(urldecoded.toString() || "/");
   } catch (e) {
     console.log(e);
