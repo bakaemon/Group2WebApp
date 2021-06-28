@@ -217,11 +217,17 @@ exports.addCourse = async (req, res) => {
         return notice("Invalid course name", template)
     }
 
-    await Course.create(template, (err) => {
+    await Course.create(template, async (err) => {
         if (err) return notice("Unable to add course to database.", template);
         notice("Course added.");
+    await Course.findOne({name: req.body.name, description: req.body.description},async (err, result)=>{
+        if(result) return notice("Duplicate coures!")
+        await Course.create(template, (err) => {
+            if (err) return notice("Unable to add course to database.");
+            notice("Course added.");
+        })
     })
-}
+    }
 exports.addCategory = async (req, res) => {
     var notice = (msg, holder) => {
         res.render("admin/course/addCategory", {
@@ -232,6 +238,7 @@ exports.addCategory = async (req, res) => {
         });
     }
     try {
+        if (!req.body.name || !req.body.description) return notice("Must enter either name or description")
         const template = {
             name: req.body.name,
             description: req.body.description

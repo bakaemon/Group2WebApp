@@ -24,18 +24,22 @@ module.exports = () => {
                 return (v1 && v2) ? options.fn(this) : options.inverse(this);
             case '||':
                 return (v1 || v2) ? options.fn(this) : options.inverse(this);
+            case "of":
+                return v1.some(r => v2.includes(r)) ? options.fn(this) : options.inverse(this);
+            case "in":
+                return (v2.includes(v1)) ? options.fn(this) : options.inverse(this);
         }
     });
-    hbs.registerHelper("math", function (lvalue, operator, rvalue, options) {
-        lvalue = parseFloat(lvalue);
-        rvalue = parseFloat(rvalue);
+    hbs.registerHelper("math", function (v1, operator, v2, options) {
+        v1 = parseFloat(v1);
+        v2 = parseFloat(v2);
 
         return {
-            "+": lvalue + rvalue,
-            "-": lvalue - rvalue,
-            "*": lvalue * rvalue,
-            "/": lvalue / rvalue,
-            "%": lvalue % rvalue
+            "+": v1 + v2,
+            "-": v1 - v2,
+            "*": v1 * v2,
+            "/": v1 / v2,
+            "%": v1 % v2
         }[operator];
     });
     //added isdefined structure that check if the variable is empty or not, return true or false boolean
@@ -44,4 +48,8 @@ module.exports = () => {
     });
     //register hbs partial
     hbs.registerPartials('views/partials');
+    //set encapsulated root variable
+    hbs.registerHelper("set", (v1, v2, options) => {
+        options.data.root[v1] = v2;
+    })
 }

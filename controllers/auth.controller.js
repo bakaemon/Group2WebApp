@@ -2,8 +2,20 @@ const models = require("../models"); // get template model for data handling fro
 const User = models.user;
 const Role = models.role;
 const Course = models.course;
+const Log = models.log;
+const { ObjectId } = require("../libraries").mongoose.Types
 // const { bcrypt } = require("../libraries")
 
+const recordToLogs = async (owner, action) => {
+  try {
+    await Log.create({ action: action, owner: ObjectId(owner)}, (err, result) => {
+      if (err) console.log(err);
+    });
+  }
+  catch (e) {
+    console.log(e);
+  }
+}
 exports.signup = async (req, res) => {
   const courses = await Course.find({});
   var notice = (msg) => {
@@ -44,9 +56,10 @@ exports.signup = async (req, res) => {
       role: role._id,
 
     };
-    await User.create(user);
-
-    notice("Sign up successfully.")
+    await User.create(user, (err, result) => {
+      recordToLogs(result._id, "created");
+    });
+    res.redirect("/auth/login");
   } catch (e) {
     console.log(e);
     notice("An error occurred while signing up");
@@ -80,12 +93,14 @@ exports.login = async (req, res) => {
     req.session.User = {
       username: user.username,
       fullname: user.fullName,
-      role: user.role.name
+      role: user.role.name,
+      _id: user._id
     };
-    
     if (req.body.remember) req.session.cookie.maxAge = 365 * 24 * 60 * 60 * 1000; //expires after a year
     else req.session.cookie.expires = false; //expire after closing browser
-    res.redirect("/");
+    var urldecoded = Buffer.from(req.query.ref || "", 'base64');
+    recordToLogs(user._id, "logged in")
+    res.redirect(urldecoded.toString() || "/");
   } catch (e) {
     console.log(e);
     notice("An error occurred while login.");
@@ -94,6 +109,7 @@ exports.login = async (req, res) => {
 exports.logout = (req, res) => {
   const userSession = req.session.User
   if (userSession) {
+    recordToLogs(req.session.User._id, "logged out")
     req.session.destroy(); //logout and go back to login page
   }
   res.redirect("/auth/login");
