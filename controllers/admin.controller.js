@@ -54,8 +54,8 @@ exports.addUser = async (req, res) => {
       return notice("Password's length must greater than 8.", holder);
     }
 
-    if (!validate("unicode", fullName) && !validate("unicode", education) && !validate("unicode", lang)) {
-      return notice("Data is not in correct format.", holder);
+    if (req.body.fullName && !validate("unicode", fullName)) { //&& !validate("unicode", education) && !validate("unicode", lang)) {
+      return notice("Full name is not in correct format.", holder);
     }
 
     if (await User.findOne({$or: [{username: username}, {email: email}]})) return notice("User has already existed.", holder);
