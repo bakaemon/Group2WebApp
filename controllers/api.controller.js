@@ -29,5 +29,14 @@ exports.getUserApi = async (req, res) => {
   }
 }
 exports.getFakeInfo = async (req, res) => {
-  res.json(faker.helpers.userCard());
+  var helpers = faker.helpers;
+  if (req.query.list == "true") res.json(Object.keys(helpers))
+  try {
+    if (req.query.k) {
+      if (helpers.hasOwnProperty(req.query.k)) res.json(faker.helpers[req.query.k]());
+      else res.json({ errorMessage: "Function did not existed." });
+    }
+  } catch (e) {
+    res.send(e);
+  }
 }

@@ -6,16 +6,16 @@
             <small style="color: red;">{{message}}</small>
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" name="fullname" placeholder="Fullname" required>
+            <input type="text" class="form-control" name="fullname" id="fullname" placeholder="Fullname" required>
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" name="username" placeholder="Username" required>
+            <input type="text" class="form-control" name="username" id="username" placeholder="Username" required>
         </div>
         <div class="form-group">
-            <input type="email" class="form-control" name="email" placeholder="Email" required>
+            <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" name="password" placeholder="Password" required>
+            <input type="text" class="form-control" name="password" id="password" placeholder="Password" required>
         </div>
         <div class="form-group">
             <select name="role" class="form-control">
@@ -26,16 +26,16 @@
         </div>
         <div class="form-group">
             <small>Date of Birth</small><br>
-            <input type="date" name="dob" class="form-control" placeholder="Date of Birth">
+            <input type="date" name="dob" id="dob" class="form-control" placeholder="Date of Birth">
         </div>
         <div class="form-group">
-            <input type="text" name="education" placeholder="Education" class="form-control">
+            <input type="text" name="education" id="education" placeholder="Education" class="form-control">
         </div>
         <div class="form-group">
-            <input type="text" name="lang" placeholder="Programming language" class="form-control">
+            <input type="text" name="lang" id="lang" placeholder="Programming language" class="form-control">
         </div>
         <div class="form-group">
-            <input type="number" name="score" placeholder="TOEIC score" class="form-control">
+            <input type="number" name="score" id="score" placeholder="TOEIC score" class="form-control">
         </div>
         <div class="form-group">
             <div class="row">
@@ -51,3 +51,46 @@
     </form>
     <div class="hint-text">Go back to <a href="/admin/users">user control panel</a></div>
 </div>
+<script>
+    const randomChoice = (array) => {
+        const random = Math.floor(Math.random() * array.length);
+        return array[random];
+    }
+    const randomString = (length) => {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() *
+                charactersLength));
+        }
+        return result;
+    }
+$("#generator").click(() => {
+            $.ajax({
+                url: "/api/fakeuser?k=contextualCard",
+                method: "get",
+                success: (res) => {
+                    var name = res.name;
+                    var username = res.username;
+                    var email = res.email;
+                    var dob = res.dob.split("T")[0];
+                    var langs = ["C++", "C", "Java", "JavaScript", "Python", "Rust", "Perl", "Ruby", "PHP"];
+                    var lang = randomChoice(langs);
+                    var education = "University Graduated";
+                    var score = Math.floor(Math.random() * 10);
+                    var role = randomChoice(["admin", "staff", "trainer", "trainee"]);
+                    var password = randomString(6)
+                    $("#fullname").val(name);
+                    $("#username").val(username);
+                    $("#email").val(email);
+                    $("#dob").val(dob);
+                    $("#education").val(education);
+                    $("#lang").val(lang)
+                    $("#score").val(score);
+                    $("#role").val(role);
+                    $("#password").val(password);
+                }
+            })
+        });
+</script>
