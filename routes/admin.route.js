@@ -3,8 +3,10 @@ const adminController = require("../controllers").admin
 module.exports = (app) => {
   app.use((req, res, next) => {
     const userSession = req.session.User;
-    if (!userSession || ["admin", "staff"].includes(userSession) ) {
-      res.redirect("/auth/login")
+    if (!userSession || ["admin", "staff"].includes(userSession)) {
+      req.session.redirectTo = req.originalUrl;
+      var urlencoded = new Buffer(req.originalUrl)
+      res.redirect("/auth/login?ref="+ urlencoded.toString('base64'))
     } else next();
   });
   /**

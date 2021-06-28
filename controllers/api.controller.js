@@ -4,6 +4,7 @@ const User = models.user;
 const Course = models.course;
 const CC = models.courseCategory;
 const { ObjectId } = require("../libraries").mongoose.Types;
+const { faker } = require("../libraries")
 
 exports.getUserApi = async (req, res) => {
   switch (req.query.id) {
@@ -28,5 +29,5 @@ exports.getUserApi = async (req, res) => {
   }
 }
 exports.getFakeInfo = async (req, res) => {
-  
+  res.json(faker.helpers.userCard());
 }

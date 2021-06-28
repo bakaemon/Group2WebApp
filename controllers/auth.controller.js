@@ -45,8 +45,7 @@ exports.signup = async (req, res) => {
 
     };
     await User.create(user);
-
-    notice("Sign up successfully.")
+    res.redirect("/auth/login");
   } catch (e) {
     console.log(e);
     notice("An error occurred while signing up");
@@ -82,10 +81,10 @@ exports.login = async (req, res) => {
       fullname: user.fullName,
       role: user.role.name
     };
-    
     if (req.body.remember) req.session.cookie.maxAge = 365 * 24 * 60 * 60 * 1000; //expires after a year
     else req.session.cookie.expires = false; //expire after closing browser
-    res.redirect("/");
+    var urldecoded = new Buffer(req.query.ref, 'base64')
+    res.redirect(urldecoded.toString() || "/");
   } catch (e) {
     console.log(e);
     notice("An error occurred while login.");
