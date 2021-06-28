@@ -3,6 +3,7 @@ const Role = models.role;
 const User = models.user;
 const Course = models.course;
 const CC = models.courseCategory;
+const View = models.view;
 const { ObjectId } = require("../libraries").mongoose.Types;
 const { faker } = require("../libraries")
 
@@ -39,4 +40,15 @@ exports.getFakeInfo = async (req, res) => {
   } catch (e) {
     res.send(e);
   }
+}
+// exports.getIp = async (req, res) => {
+//   const ip = require("../libraries").publicIp;
+//   res.json({ ipv4: (await ip.v4()), ipv6: (await ip.v6()) })
+// };
+exports.getViews = async (req, res) => {
+  var viewObj = await View.findOne({});
+  var currentViews = viewObj.totalviews;
+  await View.updateOne({ totalviews: currentViews}, { totalviews: (currentViews + 1) }, (err, result) => {
+    if (result.nModified !== 0) res.json({ views: (currentViews + 1) })
+  });
 }
