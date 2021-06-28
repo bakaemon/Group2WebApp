@@ -16,7 +16,7 @@
 
 </head>
 
-<body onload="getViews()">
+<body>
 
   <div class="body-container">
     <nav class="navbar navbar-default">
@@ -91,7 +91,7 @@
         <div class="row">
           <div class="col-md-3">
             <div class="list-group">
-              <a href="/" class="list-group-item active main-color-bg">
+              <a href="/auth" class="list-group-item active main-color-bg">
                 <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home
               </a>
               <a href="/admin/course" class="list-group-item"><span class="glyphicon glyphicon-book"
@@ -176,11 +176,21 @@
       $.ajax({
         url: "/api/getViews",
         method: "get",
+      });
+    }
+    getViews()
+  </script>
+  <script>
+    function showView() {
+      $.ajax({
+        url: "/api/showViews",
+        method: "get",
         success: (res) => {
-          $("#views").text(res.views)
+          $("#views").text(res.totalviews)
         }
       });
     }
+    setInterval(showView, 2000);
   </script>
 </body>
 

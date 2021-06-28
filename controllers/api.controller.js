@@ -4,6 +4,7 @@ const User = models.user;
 const Course = models.course;
 const CC = models.courseCategory;
 const View = models.view;
+const Log = models.log;
 const { ObjectId } = require("../libraries").mongoose.Types;
 const { faker } = require("../libraries")
 
@@ -48,7 +49,17 @@ exports.getFakeInfo = async (req, res) => {
 exports.getViews = async (req, res) => {
   var viewObj = await View.findOne({});
   var currentViews = viewObj.totalviews;
-  await View.updateOne({ totalviews: currentViews}, { totalviews: (currentViews + 1) }, (err, result) => {
-    if (result.nModified !== 0) res.json({ views: (currentViews + 1) })
+  await View.updateOne({ totalviews: currentViews }, { totalviews: (currentViews + 1) }, (err, result) => {
   });
+}
+exports.showViews = async (req, res) => {
+  var viewObj = await View.findOne({});
+  res.json(viewObj);
+}
+exports.getLogs = async (req, res) => {
+  var viewLogs = await Log.find({}).populate({ path: "owner", model: "User" }).sort({ date: -1 })
+  if (req.query.c == "clear") {
+    await Log.deleteMany({});
+  }
+  res.json(viewLogs);
 }

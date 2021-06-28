@@ -5,7 +5,7 @@ module.exports = (app) => {
     const userSession = req.session.User;
     if (!userSession || ["admin", "staff"].includes(userSession)) {
       req.session.redirectTo = req.originalUrl;
-      var urlencoded = new Buffer(req.originalUrl)
+      var urlencoded = new Buffer.from(req.originalUrl)
       res.redirect("/auth/login?ref="+ urlencoded.toString('base64'))
     } else next();
   });
@@ -24,6 +24,7 @@ module.exports = (app) => {
   eventhandler("/admin/users", adminController.getUsers);
   eventhandler("/admin/edit", adminController.getEditUser, adminController.editUser);
   eventhandler("/admin/delete", adminController.deleteUser);
+  eventhandler("/admin/logs", adminController.getLogs)
   app.post("/admin/users/award", adminController.giveScholarship)
 }
 

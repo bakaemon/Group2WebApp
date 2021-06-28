@@ -175,4 +175,7 @@ exports.getEditUser = async (req, res) => {
   }
   catch (e) { res.send(e) }
 }
+exports.getLogs = (req, res) => {
+  res.render("admin/logOutput", { title: "Activity Logs", user: req.session.User });
+}
 

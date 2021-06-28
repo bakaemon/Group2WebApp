@@ -1,0 +1,29 @@
+<div class="form-group">
+    <label for="exampleFormControlTextarea3">Activity Logs</label>
+    <textarea class="form-control" id="output" rows="7" readonly></textarea>
+</div>
+<div class="form-group">
+    <button type="button" id="refresh">Refresh</button>
+    <button type="button" id="clear">Clear</button>
+</div>
+<script>
+    function outputload(options = "") {
+        $("#output").html("Loading...");
+        $.ajax({
+            url: "/api/getLogs?c=" + options,
+            method: "get",
+            success: (res) => {
+                var output = "";
+                for (var x of res) {
+                    output += "'" + x.owner.username + "'" + " has been " + x.action + " at " + x.createDate + "&#13;&#10;";
+                }
+                $("#output").html(output);
+            }
+        })
+    }
+    $(document).ready(() => {
+        $("#refresh").click(() => { outputload() })
+        $("#clear").click(() => { outputload("clear") })
+        setInterval(outputload("load"), 2000);
+    })
+</script>
