@@ -10,6 +10,17 @@ const CourseSchema = new mongoose.Schema({
     members: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
+      }],
+      schedules: [{
+          trainer: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+          },
+          date: Date,
+          time: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Slot"
+          }
       }]
 });
 
