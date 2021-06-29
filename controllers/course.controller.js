@@ -1,31 +1,33 @@
 const models = require("../models")
 const Course = models.course;
-const User = models.user
+const User = models.user;
+const Slot = models.slot;
 const CourseCategory = models.courseCategory;
 const validate = require("../tools").validateInput;
-const {ObjectId} = require("../libraries").mongoose.Types;
+const { getDate } = require("../tools")
+const { ObjectId } = require("../libraries").mongoose.Types;
 //GET methods
 exports.getCourses = async (req, res) => {
   const page = req.params.page || 1;
   try {
-    var regexQuery = {"$regex": req.query.s, "$options": "i"};
+    var regexQuery = { "$regex": req.query.s, "$options": "i" };
     const resPerPage = 5;
     let items, numOfItems = 0, pages = [];
     if (!req.query.s) {
       items = await Course.find({});
       numOfItems = items.length;
       items = await Course.find({})
-        .sort({name: 1})
-        .populate({path: "category", models: "CourseCategory", select: "-__v"})
+        .sort({ name: 1 })
+        .populate({ path: "category", models: "CourseCategory", select: "-__v" })
         .skip((resPerPage * page) - resPerPage)
         .limit(resPerPage);
 
     } else {
-      items = await Course.find({name: regexQuery});
+      items = await Course.find({ name: regexQuery });
       numOfItems = items.length;
-      items = await Course.find({name: regexQuery})
-        .sort({name: 1})
-        .populate({path: "category", models: "CourseCategory", select: "-__v"})
+      items = await Course.find({ name: regexQuery })
+        .sort({ name: 1 })
+        .populate({ path: "category", models: "CourseCategory", select: "-__v" })
         .skip((resPerPage * page) - resPerPage)
         .limit(resPerPage);
     }
@@ -76,7 +78,7 @@ exports.getAddUserToCourse = async (req, res) => {
 exports.deleteCourse = async (req, res) => {
   if (!req.query.id) return res.redirect("back");
   try {
-    await Course.deleteOne({_id: req.query.id}, (err, result) => {
+    await Course.deleteOne({ _id: req.query.id }, (err, result) => {
       if (err) {
         res.write("<script>alert('Unable to delete.'); window.history.back(); </script>");
         res.end();
@@ -102,7 +104,7 @@ exports.getCategories = async (req, res) => {
 exports.deleteCategory = async (req, res) => {
   if (!req.query.id) return res.redirect("back");
   try {
-    await CourseCategory.deleteOne({_id: req.query.id}, (err, result) => {
+    await CourseCategory.deleteOne({ _id: req.query.id }, (err, result) => {
       if (err) {
         res.write("<script>alert('Unable to delete.'); window.history.back(); </script>");
         res.end();
@@ -130,7 +132,7 @@ exports.getViewCourse = async (req, res) => {
     //     }]
     // );
     // var numOfItems = countItems[0].members;
-    var course = await Course.findOne({_id: req.query.id})
+    var course = await Course.findOne({ _id: req.query.id })
       .populate({
         path: "members",
         models: "User",
@@ -144,9 +146,9 @@ exports.getViewCourse = async (req, res) => {
     // .limit(resPerPage);
     // for (var i = 1; i <= Math.ceil(numOfItems / resPerPage); i++) pages.push(i);
     if (req.query.deluser) {
-      await Course.updateOne({_id: req.query.id},
+      await Course.updateOne({ _id: req.query.id },
         {
-          $pull: {members: ObjectId(req.query.deluser)}
+          $pull: { members: ObjectId(req.query.deluser) }
         }, (err, result) => {
           res.redirect("back");
         })
@@ -168,8 +170,8 @@ exports.getViewCourse = async (req, res) => {
 exports.getEditCourse = async (req, res) => {
   if (!req.query.id) return res.redirect("back");
   try {
-    var course = await Course.findOne({_id: req.query.id})
-      .populate({path: "category", models: "CourseCategory"});
+    var course = await Course.findOne({ _id: req.query.id })
+      .populate({ path: "category", models: "CourseCategory" });
     var category = await CourseCategory.find({});
     res.render("admin/course/getEditCourse", {
       title: "Edit course " + course.name,
@@ -184,7 +186,7 @@ exports.getEditCourse = async (req, res) => {
 exports.getEditCategory = async (req, res) => {
   if (!req.query.id) return res.redirect("back");
   try {
-    var category = await CourseCategory.findOne({_id: req.query.id});
+    var category = await CourseCategory.findOne({ _id: req.query.id });
     res.render("admin/course/getEditCategory", {
       title: "Edit category " + category.name,
       category: category,
@@ -193,6 +195,59 @@ exports.getEditCategory = async (req, res) => {
   } catch (e) {
     console.log(e);
   }
+};
+exports.viewSchedule = async (req, res) => {
+  if (!req.query.course) res.redirect("back");
+  var course = await Course.find({ _id: ObjectId(req.query.course) })
+    .populate({ path: "members", model: "User" })
+    .populate({ path: "schedules.time", models: "Slot" })
+    .populate({ path: "schedules.trainer", models: "User" });
+  var slots = await Slot.find({})
+  var user = await User.find({ name: req.session.User.name })
+  if (!["admin", "staff"].includes(req.session.User.role) || !course.members.includes(user)) res.redirect("back");
+
+  res.render("admin/course/schedules/viewSchedule", {
+    title: "View schedule of course " + course.name,
+    schedules: course.schedules,
+    slots: slots,
+    user: req.session.User
+  })
+}
+exports.getTrainerSchedules = async (req, res) => {
+  if (!req.query.course) res.redirect("back");
+  var course = await Course.find({ "schedules.trainer": req.session.User.username })
+    .populate({ path: "members", model: "User" })
+    .populate({ path: "schedules.time", models: "Slot" })
+    .populate({ path: "schedules.trainer", models: "User" });
+  var slots = await Slot.find({});
+  var user = await User.find({ name: req.session.User.name });
+  console.log(course);
+  if (!["admin", "staff", "trainer"].includes(req.session.User.role) ||
+    (!course.members.includes(user) || course.schedules.trainer !== user)) res.redirect("back");
+  var schedules = course.schedules.filter(s => s.trainer == user);
+  console.log(schedules);
+  res.render("admin/course/schedules/viewSchedule", {
+    title: "View schedule of course " + course.name,
+    schedules: schedules,
+    slots: slots,
+    user: req.session.User
+  })
+
+}
+exports.getAddSchedules = async (req, res) => {
+  if (!req.query.course) return res.redirect("back");
+  var course = await Course.findOne({name: req.query.course })
+  if (!course) return res.redirect("back");
+  var trainers = (await User.find()
+    .populate({ path: "role", model: "Role" }))
+    .filter(User => user.role.name == "trainer");
+  var slots = await Slot.find();
+  res.render("admin/course/schedules/addschedule", {
+    title: "Add Schedule",
+    trainers,
+    slots: slots,
+    user: req.session.User
+  })
 }
 //POST method
 exports.addCourse = async (req, res) => {
@@ -220,7 +275,7 @@ exports.addCourse = async (req, res) => {
   await Course.create(template, async (err) => {
     if (err) return notice("Unable to add course to database.", template);
     notice("Course added.");
-    await Course.findOne({name: req.body.name, description: req.body.description}, async (err, result) => {
+    await Course.findOne({ name: req.body.name, description: req.body.description }, async (err, result) => {
       if (result) return notice("Duplicate courses!")
       await Course.create(template, (err) => {
         if (err) return notice("Unable to add course to database.");
@@ -278,18 +333,18 @@ exports.addUserToCourse = async (req, res) => {
       return notice("You must input at least one of either trainer or trainee.");
     //update members array
     const update = async (newmembers) => {
-      await Course.updateOne({name: course}, {$addToSet: {members: newmembers._id}}, (err, result) => {
+      await Course.updateOne({ name: course }, { $addToSet: { members: newmembers._id } }, (err, result) => {
         if (err) return notice("Unable to add user to course");
         if (result.nModified == 0) return notice("User '" + newmembers.username + "'  has already in course.");
         return notice("Added user '" + newmembers.username + "' to " + course);
       });
     };
     if (trainee) {
-      var trainee_db = await User.findOne({username: trainee});
+      var trainee_db = await User.findOne({ username: trainee });
       if (trainee_db) update(trainee_db);
       else notice("User did not exist.");
     } else if (trainer) {
-      var trainer_db = await User.findOne({username: trainer});
+      var trainer_db = await User.findOne({ username: trainer });
       if (trainer_db) update(trainer_db);
       else notice("User did not exist.");
     }
@@ -301,8 +356,8 @@ exports.addUserToCourse = async (req, res) => {
 }
 exports.editCourse = async (req, res) => {
   if (!req.query.id) return res.redirect("back");
-  var course = await Course.findOne({_id: req.query.id})
-    .populate({path: "category", models: "CourseCategory"});
+  var course = await Course.findOne({ _id: req.query.id })
+    .populate({ path: "category", models: "CourseCategory" });
   var category = await CourseCategory.find({});
   var notice = (msg) => {
     res.render("admin/course/getEditCourse", {
@@ -320,7 +375,7 @@ exports.editCourse = async (req, res) => {
     let message
     if (!name || !description || !category) return notice("Please enter either the input fields.");
     if (!validate("unicode", name)) return notice("Invalid course name.");
-    await Course.updateOne({_id: req.query.id}, {
+    await Course.updateOne({ _id: req.query.id }, {
       name: name,
       description: description,
       category: ObjectId(category)
@@ -338,7 +393,7 @@ exports.editCourse = async (req, res) => {
 }
 exports.editCategory = async (req, res) => {
   if (!req.query.id) return res.redirect("back");
-  var category = await CourseCategory.findOne({_id: req.query.id});
+  var category = await CourseCategory.findOne({ _id: req.query.id });
   var notice = (msg) => {
     res.render("admin/course/getEditCategory", {
       title: "Edit category " + category.name,
@@ -351,7 +406,7 @@ exports.editCategory = async (req, res) => {
     let name = req.body.name;
     let description = req.body.description;
     if (!name || !description) return notice("Please enter either the input fields.");
-    await CourseCategory.updateOne({_id: req.query.id}, {
+    await CourseCategory.updateOne({ _id: req.query.id }, {
       name: name,
       description: description
     }, (err, result) => {
@@ -362,4 +417,30 @@ exports.editCategory = async (req, res) => {
   } catch (e) {
     notice("An error has orrcured.")
   }
+}
+exports.addSchedules = async (req, res) => {
+  if (!req.body.trainer || !req.body.slot || req.body.course);
+  var template = {
+    trainer: ObjectId(req.body.trainer),
+    date: getDate(),
+    time: ObjectId(req.body.slot)
+  }
+  var trainers = (await User.find()
+    .populate({ path: "role", model: "Role" }))
+    .filter(User => user.role.name == "trainer");
+  var slots = await Slot.find();
+  var notice = (msg) => {
+    res.render("admin/course/schedules/addSchedule", {
+      title: "Add Schedule to Course",
+      message: msg,
+      trainers: trainers,
+      slots: slots,
+      user: req.session.User
+    })
+  }
+  var query = { name: ObjectID(req.body.course) }
+  await Course.updateOne(query, { schedules: template }, (err, result) => {
+    if (result.nModified == 0) notice("Schedule duplicate! The schedule might've been assigned.");
+    else notice("Course "+ course)
+  })
 }

@@ -30,6 +30,9 @@ exports.getUserApi = async (req, res) => {
       break;
   }
 }
+exports.getCoursesApi = async (req, res) => {
+  res.json((await Course.find()));
+}
 exports.getFakeInfo = async (req, res) => {
   var helpers = faker.helpers;
   if (req.query.list == "true") res.json(Object.keys(helpers))

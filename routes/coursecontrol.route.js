@@ -22,4 +22,5 @@ module.exports = (app) => {
     eventhandler("/admin/course/view", courseController.getViewCourse);
     eventhandler("/admin/course/edit", courseController.getEditCourse, courseController.editCourse);
     eventhandler("/admin/course/edit_category", courseController.getEditCategory, courseController.editCategory);
+    eventhandler("/admin/course/trainerschedule", courseController.getTrainerSchedules)
 }
