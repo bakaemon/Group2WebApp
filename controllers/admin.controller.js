@@ -16,7 +16,7 @@ exports.addUser = async (req, res) => {
       user: req.session.User,
     })
   };
-  if (roles.length == 0) notice("Can't not retrieve roles from database.");
+  if (roles.length === 0) notice("Can't not retrieve roles from database.");
   try {
     const username = req.body.username;
     const email = req.body.email;
@@ -28,7 +28,7 @@ exports.addUser = async (req, res) => {
     const score = req.body.score;
     let role = req.body.role;
     let roles = await Role.find({});
-    if (roles.length == 0) res.send("Can't not retrieve roles from database.");
+    if (roles.length === 0) res.send("Can't not retrieve roles from database.");
     const check = await Role.findOne({name: role});
     if (!check) {
       return notice(`Role ${req.body.role} does not existed.`)
@@ -150,22 +150,25 @@ exports.editUser = async (req, res) => {
 }
 exports.giveScholarship = async (req, res) => {
   var respond = (message, data = {}, isError = true,) => {
-    res.json({ status: isError, message: message, data: data })
+    res.json({status: isError, message: message, data: data})
   }
-  var user = await User.findOne({ _id: req.body.id });
+  var user = await User.findOne({_id: req.body.id});
   if (!user) return respond("No user found.");
-  var users = await User.find().sort({ "bio.Score": -1 });
+  var users = await User.find().sort({"bio.Score": -1});
   if (-1 > users.indexOf(user) > 2) return respond("User didn't meet criteria to get scholarship");
   await User.updateOne(user, {
     scholarship: {
       active: req.body.active,
       total: req.body.total
     }
-  }, { multi: true }).then((result, err) => {
+  }, {multi: true}).then((result, err) => {
     if (result.nModified !== 0)
       return respond("Set " + user.username + "'s scholarship to active, total value of $" + req.body.total, result, false);
     respond("The trainee " + user.name + " already had scholarship!");
-  }).catch(e => { respond(e); console.log(e) });
+  }).catch(e => {
+    respond(e);
+    console.log(e)
+  });
 }
 /* GET methods */
 exports.getUsers = async (req, res) => {
@@ -174,11 +177,13 @@ exports.getUsers = async (req, res) => {
     const searchQuery = req.query.search_query;
     var regexQuery = {"$regex": searchQuery, "$options": "i"}
     const resPerPage = 5; // results per page
-    let users, numOfUsers = 0, pages = [];
+    let users, numOfUsers = 0, pages = [], filter, roles = [];
+    roles = await Role.find({name: {$in: ["trainee", "trainer"]}});
+    roles = roles.map(role => role._id.toString());
     if (!searchQuery) {
-      users = await User.find();
-      numOfUsers = users.length;
-      users = await User.find({})
+      (req.session.User && req.session.User.role === "staff") ? filter = {role: {$in: roles}} : filter = {}
+      numOfUsers = await User.countDocuments(filter);
+      users = await User.find(filter)
         .sort({username: 1})
         .populate({path: "role", model: "Role", select: "-__v"})
         .skip((resPerPage * page) - resPerPage)
@@ -187,6 +192,7 @@ exports.getUsers = async (req, res) => {
       const query = {$or: [{email: regexQuery}, {fullName: regexQuery}, {username: regexQuery}]}
       users = await User.find(query)
       numOfUsers = users.length;
+
       users = await User.find(query)
         .sort({username: 1})
         .populate({path: "role", model: "Role", select: "-__v"})
@@ -225,15 +231,21 @@ exports.deleteUser = async (req, res) => {
   }
 }
 exports.getAddUser = async (req, res) => {
-  let roles = await Role.find({});
-  if (roles.length == 0) res.send("Can't not retrieve roles from database.");
+  let filter;
+  if (req.session.User && req.session.User.role === "admin") filter = {};
+  if (req.session.User && req.session.User.role === "staff") filter = {name: {$in: ["trainer", "trainee"]}}
+  let roles = await Role.find(filter);
+  if (roles.length === 0) res.send("Can't not retrieve roles from database.");
   res.render("admin/addUser", {title: "Add user", role: roles})
 }
 exports.getEditUser = async (req, res) => {
   var user_id = req.query.id;
   try {
+    let filter;
     var user = await User.findOne({_id: ObjectId(user_id)}).populate({path: "role", model: "Role"});
-    var roles = await Role.find({});
+    if (req.session.User && req.session.User.role === "admin") filter = {};
+    if (req.session.User && req.session.User.role === "staff") filter = {name: {$in: ["trainer", "trainee"]}}
+    var roles = await Role.find(filter);
     if (!user) res.redirect("back");
     res.render("admin/editUser", {title: "Edit user", user_data: user, role: roles, user: req.session.User});
   } catch (e) {
@@ -241,6 +253,6 @@ exports.getEditUser = async (req, res) => {
   }
 }
 exports.getLogs = (req, res) => {
-  res.render("admin/logOutput", { title: "Activity Logs", user: req.session.User });
+  res.render("admin/logOutput", {title: "Activity Logs", user: req.session.User});
 }
 

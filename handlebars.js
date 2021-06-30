@@ -46,6 +46,9 @@ module.exports = () => {
     hbs.registerHelper('isdefined', function (value, options) {
         return (value !== undefined) ? options.fn(this) : options.inverse(this);
     });
+    hbs.registerHelper('multipleCond', function (v1, v2, v3, options) {
+        return (v1 === v2 || v1 === v3) ? options.fn(this) : options.inverse(this);
+    });
     //register hbs partial
     hbs.registerPartials('views/partials');
     //set encapsulated root variable

@@ -31,8 +31,9 @@
                 <thead>
                     <tr>
                         <th>Username <i class="fa fa-sort"></i></th>
-                        <th>Fullname</th>
+                        <th>Full Name</th>
                         <th>Email <i class="fa fa-sort"></i></th>
+                        <th>Role </th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -42,6 +43,7 @@
                         <td>{{username}}</td>
                         <td>{{fullName}}</td>
                         <td>{{email}}</td>
+                        <td>{{role.name}}</td>
                         <td>
                             <div style="display: flex; justify-content: space-around; width: 70%">
                                 <a href="/admin/view?id={{_id}}" class="view" title="View" data-toggle="tooltip"><i
