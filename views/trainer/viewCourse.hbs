@@ -1,0 +1,72 @@
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="show-entries dropdown show">
+                            <div class="dropdown create">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li><a class="dropdown-item" href="#">View assigned courses</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <h2 class="text-center">Courses' <b>Details</b></h2>
+                    </div>
+                    <div class="col-sm-4">
+                        <form action="" method="GET">
+                            <div class="search-box">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+                                    <input type="text" class="form-control" placeholder="Search&hellip;" name="s">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading main-color-bg">
+                <h3 class="panel-title">Available Courses</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                {{#each courses}}
+                    <div class="col-md-4">
+                        <div class="well dash-box" style="min-height: 20vh">
+                            <h2><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span></h2>
+                            <h4>{{this.name}}</h4>
+                        </div>
+                    </div>
+                {{/each}}
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="hint-text">Found <b>{{numOfItems}}</b> entries</div>
+            <ul class="pagination">
+                {{#ifCond ifCond page ">" 1}}
+                    <li class="page-item"><a href="?page={{math page '-' 1}}">Previous</a></li>
+                {{/ifCond}}
+                {{#each pages}}
+                    {{#ifCond this "==" page}}
+                        <li class="page-item active"><a href="" class="page-link">{{this}}</a></li>
+                    {{else}}
+                        <li class="page-item"><a href="?page={{this}}" class="page-link">{{this}}</a></li>
+                    {{/ifCond}}
+                {{/each}}
+                {{#ifCond page ">" pagelength}}
+                    <li class="page-item"><a href="?page={{math page '+' 1}}" class="pager-link">Next</a></li>
+                {{/ifCond}}
+            </ul>
+        </div>
+    </div>
+</div>

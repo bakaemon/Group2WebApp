@@ -32,6 +32,18 @@ exports.getCourses = async (req, res) => {
         .limit(resPerPage);
     }
     for (var i = 1; i <= Math.ceil(numOfItems / resPerPage); i++) pages.push(i);
+
+    if (req.session.User && req.session.User.role === "trainer") {
+      return res.render("trainer/viewCourse", {
+        title: "Course control panel",
+        user: req.session.User,
+        courses: items,
+        page: page,
+        numOfItems: numOfItems,
+        pages: pages,
+        pagelength: Math.ceil(numOfItems / resPerPage)
+      });
+    }
     res.render("admin/course/getCourses", {
       title: "Course control panel",
       user: req.session.User,
@@ -234,6 +246,19 @@ exports.getTrainerSchedules = async (req, res) => {
   })
 
 }
+
+exports.getWeeklySchedules = (req, res) => {
+  res.render("trainer/viewSchedule", {
+    user: req.session.User
+  });
+}
+
+// exports.getAssignedCourse = (req, res) => {
+//   res.render("trainer/viewCourse", {
+//     user: req.session.User
+//   });
+// }
+
 exports.getAddSchedules = async (req, res) => {
   if (!req.query.course) return res.redirect("back");
   var course = await Course.findOne({name: req.query.course })

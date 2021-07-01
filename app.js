@@ -3,15 +3,9 @@ const app = lib.express();
 const mongoose = lib.mongoose;
 const bodyParser = lib.bodyParser;
 const configs = require("./configs");
+const MongoStore = require('connect-mongo')
 
 /* Middlewares */
-// express session initialization
-app.use(lib.session({
-  resave: true,
-  saveUninitialized: true,
-  secret: 'extremelysecret',
-  cookie: {maxAge: 600000}
-}));
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
@@ -34,6 +28,18 @@ mongoose.connect(uri, {
   console.log(e);
   process.exit();
 });
+
+// express session initialization
+app.use(lib.session({
+  resave: true,
+  saveUninitialized: true,
+  secret: 'extremelysecret',
+  cookie: {maxAge: 600000},
+  store: MongoStore.create({
+    mongoUrl: uri,
+    ttl: 14 * 24 * 60 * 60 // 14 days
+  })
+}));
 // Routes
 configs.routes.load(app);
 /* 404 handling */
